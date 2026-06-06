@@ -1,11 +1,3 @@
--- ============================================================
--- Vermilion UI
--- Database.lua
--- SavedVariables Initialization
--- ============================================================
-
-local V, C, L, _ = select(2, ...):unpack()
-
 ----------------------------------------------------------
 -- Root Database
 ----------------------------------------------------------
@@ -13,43 +5,18 @@ local V, C, L, _ = select(2, ...):unpack()
 VermilionDB = VermilionDB or {}
 
 ----------------------------------------------------------
--- Profile Database
---------------------------------------------------
-
-VermilionDB.Profiles = VermilionDB.Profiles or {}
-
-----------------------------------------------------------
--- Active Profiles
+-- Tables
 ----------------------------------------------------------
 
+VermilionDB.Profiles       = VermilionDB.Profiles or {}
 VermilionDB.ActiveProfiles = VermilionDB.ActiveProfiles or {}
+VermilionDB.CharacterData  = VermilionDB.CharacterData or {}
+VermilionDB.Movers         = VermilionDB.Movers or {}
+VermilionDB.GUI            = VermilionDB.GUI or {}
+VermilionDB.Installer      = VermilionDB.Installer or {}
 
 ----------------------------------------------------------
--- Character Database
-----------------------------------------------------------
-
-VermilionDB.CharacterData = VermilionDB.CharacterData or {}
-
-----------------------------------------------------------
--- Movers
-----------------------------------------------------------
-
-VermilionDB.Movers = VermilionDB.Movers or {}
-
-----------------------------------------------------------
--- GUI
-----------------------------------------------------------
-
-VermilionDB.GUI = VermilionDB.GUI or {}
-
-----------------------------------------------------------
--- Installer
-----------------------------------------------------------
-
-VermilionDB.Installer = VermilionDB.Installer or {}
-
-----------------------------------------------------------
--- Version
+-- Metadata
 ----------------------------------------------------------
 
 VermilionDB.Version = VermilionDB.Version or 1
@@ -59,3 +26,5 @@ VermilionDB.Version = VermilionDB.Version or 1
 ----------------------------------------------------------
 
 V.DB = VermilionDB
+
+V.DB.Character = V.DB.CharacterData

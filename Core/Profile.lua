@@ -54,13 +54,13 @@ end
 -- Create
 ----------------------------------------------------------
 
-function V.CreateProfile(profileName)
+function V.DeleteProfile(profileName)
 
-    if V.DB.Profiles[profileName] then
+    if profileName == "Default" then
         return false
     end
 
-    V.DB.Profiles[profileName] = CopyTable(C, true)
+    V.DB.Profiles[profileName] = nil
 
     return true
 
@@ -74,6 +74,12 @@ function V.DeleteProfile(profileName)
 
     if profileName == "Default" then
         return false
+    end
+
+    local charKey = V.GetCharKey()
+
+    if V.DB.ActiveProfiles[charKey] == profileName then
+        V.DB.ActiveProfiles[charKey] = V.Name
     end
 
     V.DB.Profiles[profileName] = nil
@@ -187,7 +193,7 @@ end
 
 local function OnAddonLoaded(addon)
 
-    if addon ~= "VermilionUI" then
+    if addon ~= V.Name then
         return
     end
 
