@@ -1,118 +1,121 @@
 -- ============================================================
--- Vermilion UI
+-- FrostUI / Vermilion
 -- Core/Events.lua
--- Central Event Dispatcher
+-- Central Event Manager
 -- ============================================================
 
 local V, C, L, _ = select(2, ...):unpack()
 
-----------------------------------------------------------
--- Local Cache
-----------------------------------------------------------
-
-local CreateFrame = CreateFrame
-local pcall = pcall
-local tostring = tostring
-local tinsert = table.insert
-local tremove = table.remove
+local EventFrame = CreateFrame("Frame")
 
 ----------------------------------------------------------
--- Event Frame
+-- Register Events
 ----------------------------------------------------------
 
-V.EventFrame = CreateFrame("Frame")
+EventFrame:RegisterEvent("ADDON_LOADED")
+EventFrame:RegisterEvent("PLAYER_LOGIN")
+EventFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
 
 ----------------------------------------------------------
--- Registered Callbacks
+-- ADDON_LOADED
 ----------------------------------------------------------
 
-V.EventHandlers = {}
+local function OnAddonLoaded(addon)
 
-----------------------------------------------------------
--- Register API
-----------------------------------------------------------
+    if addon ~= "Vermilion" then
+        return
+    end
 
-function V.RegisterEvent(event, func)
+    -- Initialize SavedVariables
+    VermilionDB = VermilionDB or {}
+    VermilionDB.Profiles = VermilionDB.Profiles or {}
+    VermilionDB.ActiveProfiles = VermilionDB.ActiveProfiles or {}
+    VermilionDB.CharacterData = VermilionDB.CharacterData or {}
 
-	if not event or not func then
-		return
-	end
-
-	local handlers = V.EventHandlers[event]
-
-	if not handlers then
-		handlers = {}
-		V.EventHandlers[event] = handlers
-		V.EventFrame:RegisterEvent(event)
-	end
-
-	for i = 1, #handlers do
-		if handlers[i] == func then
-			return
-		end
-	end
-
-	tinsert(handlers, func)
+    if V.Print then
+        V.Print("Database initialized.")
+    end
 end
 
 ----------------------------------------------------------
--- Unregister API
+-- PLAYER_LOGIN
 ----------------------------------------------------------
 
-function V.UnregisterEvent(event, func)
+local function OnPlayerLogin()
 
-	local handlers = V.EventHandlers[event]
-	if not handlers then
-		return
-	end
+    -- Load active profile
+    if V.GetActiveProfile and V.LoadProfile then
 
-	if not func then
-		V.EventHandlers[event] = nil
-		V.EventFrame:UnregisterEvent(event)
-		return
-	end
+        local profile = V.GetActiveProfile()
 
-	for i = #handlers, 1, -1 do
-		if handlers[i] == func then
-			tremove(handlers, i)
-		end
-	end
+        if profile then
+            V.LoadProfile(profile)
 
-	if #handlers == 0 then
-		V.EventHandlers[event] = nil
-		V.EventFrame:UnregisterEvent(event)
-	end
+            if V.Print then
+                V.Print("Loaded profile: "..profile)
+            end
+        end
+    end
+
+    ------------------------------------------------------
+    -- Future
+    ------------------------------------------------------
+
+    -- Install Wizard
+    -- if V.RunInstaller then
+    --     V.RunInstaller()
+    -- end
+
+    -- Version Check
+    -- if V.CheckVersion then
+    --     V.CheckVersion()
+    -- end
+
+    -- Movers Restore
+    -- if V.RestoreMovers then
+    --     V.RestoreMovers()
+    -- end
+
+    -- Refresh UI
+    -- if V.RefreshGUI then
+    --     V.RefreshGUI()
+    -- end
 end
 
 ----------------------------------------------------------
--- Dispatcher
+-- PLAYER_ENTERING_WORLD
 ----------------------------------------------------------
 
-V.EventFrame:SetScript("OnEvent", function(self, event, ...)
+local function OnEnteringWorld()
 
-	local handlers = V.EventHandlers[event]
+    -- Future use
 
-	if not handlers then
-		return
-	end
+    -- Force refresh
+    -- if V.RefreshModules then
+    --     V.RefreshModules()
+    -- end
 
-	for i = 1, #handlers do
+end
 
-		local handler = handlers[i]
+----------------------------------------------------------
+-- Event Dispatcher
+----------------------------------------------------------
 
-		if handler then
-			local ok, err = pcall(handler, ...)
+EventFrame:SetScript("OnEvent", function(self, event, ...)
 
-			if not ok then
-				if V.Print then
-					V.Print("|cffff3333Error:|r " .. tostring(err))
-				else
-					DEFAULT_CHAT_FRAME:AddMessage("|cffff3333[Vermilion]|r " .. tostring(err))
-				end
-			end
-		end
+    if event == "ADDON_LOADED" then
 
-	end
+        OnAddonLoaded(...)
+
+    elseif event == "PLAYER_LOGIN" then
+
+        OnPlayerLogin()
+
+    elseif event == "PLAYER_ENTERING_WORLD" then
+
+        OnEnteringWorld()
+
+    end
 
 end)
 
@@ -120,9 +123,4 @@ end)
 -- API
 ----------------------------------------------------------
 
-V.Events = {}
-
-V.Events.Frame = V.EventFrame
-V.Events.Register = V.RegisterEvent
-V.Events.Unregister = V.UnregisterEvent
-V.Events.Handlers = V.EventHandlers
+V.Events = EventFrame

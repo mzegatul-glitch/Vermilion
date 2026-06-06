@@ -403,7 +403,7 @@ function Filger:OnEvent(event, unit)
 				if not self.actives[i] then
 					self.actives[i] = {data = data, name = name, icon = icon, count = count, start = start, duration = duration, spid = spid}
 					needUpdate = true
-					if K.Class == "DEATHKNIGHT" and self.actives[i].duration == 10 then
+					if V.Class == "DEATHKNIGHT" and self.actives[i].duration == 10 then
 						self.actives[i] = nil
 					end
 				else

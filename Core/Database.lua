@@ -1,30 +1,61 @@
+-- ============================================================
+-- Vermillion UI
+-- Database.lua
+-- SavedVariables Initialization
+-- ============================================================
+
+local V, C, L, _ = select(2, ...):unpack()
+
 ----------------------------------------------------------
 -- Root Database
 ----------------------------------------------------------
 
-VermilionDB = VermilionDB or {}
+VermillionDB = VermillionDB or {}
 
 ----------------------------------------------------------
--- Tables
+-- Profile Database
 ----------------------------------------------------------
 
-VermilionDB.Profiles       = VermilionDB.Profiles or {}
-VermilionDB.ActiveProfiles = VermilionDB.ActiveProfiles or {}
-VermilionDB.CharacterData  = VermilionDB.CharacterData or {}
-VermilionDB.Movers         = VermilionDB.Movers or {}
-VermilionDB.GUI            = VermilionDB.GUI or {}
-VermilionDB.Installer      = VermilionDB.Installer or {}
+VermillionDB.Profiles = VermillionDB.Profiles or {}
 
 ----------------------------------------------------------
--- Metadata
+-- Active Profiles
 ----------------------------------------------------------
 
-VermilionDB.Version = VermilionDB.Version or 1
+VermillionDB.ActiveProfiles = VermillionDB.ActiveProfiles or {}
+
+----------------------------------------------------------
+-- Character Database
+----------------------------------------------------------
+
+VermillionDB.CharacterData = VermillionDB.CharacterData or {}
+
+----------------------------------------------------------
+-- Movers
+----------------------------------------------------------
+
+VermillionDB.Movers = VermillionDB.Movers or {}
+
+----------------------------------------------------------
+-- GUI
+----------------------------------------------------------
+
+VermillionDB.GUI = VermillionDB.GUI or {}
+
+----------------------------------------------------------
+-- Installer
+----------------------------------------------------------
+
+VermillionDB.Installer = VermillionDB.Installer or {}
+
+----------------------------------------------------------
+-- Version
+----------------------------------------------------------
+
+VermillionDB.Version = VermillionDB.Version or 1
 
 ----------------------------------------------------------
 -- API
 ----------------------------------------------------------
 
-V.DB = VermilionDB
-
-V.DB.Character = V.DB.CharacterData
+K.DB = VermillionDB

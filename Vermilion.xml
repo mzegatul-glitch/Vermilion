@@ -2,13 +2,12 @@
 	<Script file="Core\Init.lua"/>
 
 	<Script file="Locales\enUS.lua"/>
-	<Script file="Locales\deDE.lua"/>
 
 	<Script file="Config\Settings.lua"/>
 	<Script file="Config\Positions.lua"/>
 	<Script file="Core\Profile.lua"/>
 	
-	<Script file="ConfigGUI\Vermilion_Config.lua"/>
+	<Script file="Core\GUI.lua"/>
 	
 	
 	<Script file="Core\PixelPerfect.lua"/>
