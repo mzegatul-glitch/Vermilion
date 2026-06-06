@@ -1,0 +1,29 @@
+## Interface: 30300
+## Title: |cffe60000Vermilion|r
+## Notes: |cffffe02eBy Josh "Vermilion" Russell|r |n|n|cff2eb6ffPayPal.Me|r|cffffffff:|r|n|cffffffffwww.paypal.me/Vermilion|r
+## Author: Shestak, Josh "Vermilion" Russell
+## Version: 5.07
+## DefaultState: Enabled
+## OptionalDeps: Blizzard_CombatText, Blizzard_DebugTools, CLCRet, DBM-Core, Recount, Skada, Spy, WeakAuras
+## SavedVariables: SavedOptions, ProcGlowDB, VermilionDB
+## SavedVariablesPerCharacter: SavedOptionsPerChar, SavedPositions, StuffingBankSnapshotDB
+## eMail: Vermilion
+## Website:
+## Donate: PayPal:PayPal.Me/Vermilion
+## License: The MIT License (MIT) Copyright (c) 2012 - 2016 Josh "Vermilion" Russell
+
+# Main UI (бүх файлыг ачаална)
+# Libraries
+Libs\LibStub\LibStub.lua
+Libs\LibCustomGlow-1.0\LibCustomGlow-1.0.xml
+Libs\CallbackHandler-1.0\CallbackHandler-1.0.lua
+Libs\LibHealComm-4.0\LibHealComm-4.0.xml
+Libs\SpecializedAbsorbs-1.0\SpecializedAbsorbs-1.0.lua
+Libs\LibResComm-1.0\LibResComm-1.0.lua
+
+Vermilion.xml
+AllStats.lua
+AllStats.xml
+Modules\Misc\ProcGlow.lua
+
+BlizzMove.lua

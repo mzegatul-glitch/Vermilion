@@ -1,0 +1,19 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+    <Script file="Modules\ActionBars\Bar1.lua"/>
+    <Script file="Modules\ActionBars\Bar2.lua"/>
+    <Script file="Modules\ActionBars\Bar3.lua"/>
+    <Script file="Modules\ActionBars\Bar4.lua"/>
+    <Script file="Modules\ActionBars\Bar5.lua"/>
+    <Script file="Modules\ActionBars\Bindings.lua"/>
+    <Script file="Modules\ActionBars\Cooldowns.lua"/>
+    <Script file="Modules\ActionBars\Functions.lua"/>
+    <Script file="Modules\ActionBars\Hide.lua"/>
+    <Script file="Modules\ActionBars\Others.lua"/>
+    <Script file="Modules\ActionBars\PetBar.lua"/>
+    <Script file="Modules\ActionBars\Range.lua"/>
+    <Script file="Modules\ActionBars\SelfCast.lua"/>
+    <Script file="Modules\ActionBars\ShapeshiftBar.lua"/>
+    <Script file="Modules\ActionBars\Style.lua"/>
+    <Script file="Modules\ActionBars\Toggle.lua"/>
+    <Script file="Modules\ActionBars\TotemBar.lua"/>
+</Ui>

@@ -1,0 +1,4 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+    <Script file="Modules\Buffs\BuffFrame.lua"/>
+    <Script file="Modules\Buffs\AuraSource.lua"/>
+</Ui>

@@ -1,0 +1,17 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+    <Script file="Modules\UnitFrames\Arena.lua"/>
+    <Script file="Modules\UnitFrames\Auras.lua"/>
+    <Script file="Modules\UnitFrames\Border_old.lua"/>
+    <Script file="Modules\UnitFrames\CastBars.lua"/>
+    <Script file="Modules\UnitFrames\EnhancedFrames.lua"/>
+    <Script file="Modules\UnitFrames\HealthMinMax.lua"/>
+    <Script file="Modules\UnitFrames\Incoming Heal.lua"/>
+    <Script file="Modules\UnitFrames\Layout.lua"/>
+    <Script file="Modules\UnitFrames\Party.lua"/>
+    <Script file="Modules\UnitFrames\PowerBar.lua"/>
+    <Script file="Modules\UnitFrames\Raid.lua"/>
+    <Script file="Modules\UnitFrames\RaidHoTs.lua.lua"/>
+    <Script file="Modules\UnitFrames\RaidTankCDs.lua.lua"/>
+    <Script file="Modules\UnitFrames\SmoothBars.lua"/>
+    <Script file="Modules\UnitFrames\TargetThreatFrame.lua"/>
+</Ui>

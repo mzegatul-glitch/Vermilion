@@ -1,0 +1,6 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+    <Script file="Skins\Blizzard\Bubbles.lua"/>
+    <Script file="Skins\Blizzard\FrameStack.lua"/>
+    <Script file="Skins\Blizzard\MinimapButtons.lua"/>
+    <Script file="Skins\Blizzard\WorldMap.lua"/>
+</Ui>

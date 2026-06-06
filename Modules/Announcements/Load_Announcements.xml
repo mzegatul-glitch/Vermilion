@@ -1,0 +1,8 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+    <Script file="Modules\Announcements\Interrupt.lua"/>
+    <Script file="Modules\Announcements\PullCountdown.lua"/>
+    <Script file="Modules\Announcements\SaySapped.lua"/>
+    <Script file="Modules\Announcements\Spells.lua"/>
+    <Script file="Modules\Announcements\BadGear.lua"/>
+    <Script file="Modules\Announcements\FeastsAndPortals.lua"/>
+</Ui>
