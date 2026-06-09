@@ -51,7 +51,6 @@ local ALLOWED_GROUPS = {
     ["Tooltip"] = 19,
     ["Unitframe"] = 20,
     ["Raid"] = 21,
-    ["Profiles"] = 22,
 }
 
 local CustomOrder = {
@@ -89,7 +88,7 @@ local CustomOrder = {
         "BuffsSize", "CooldownSize", "Enable", "MaxTestIcon", "PvPSize", "ShowTooltip", "TestMode"
     },
     ["General"] = {
-        "AutoScale", "BubbleFontSize", "BubbleBackdrop", "ReplaceBlizzardFonts", "TranslateMessage", "UIScale", "MultisampleCheck", "WelcomeMessage"
+        "AutoScale", "BubbleFontSize", "BubbleBackdrop", "ReplaceBlizzardFonts", "TranslateMessage", "UIScale", "MultisampleCheck", "WelcomeMessage", "Profiles"
     },
     ["Loot"] = {
         "ConfirmDisenchant", "AutoGreed", "LootFilter", "IconSize", "Enable", "GroupLoot", "Width"
@@ -98,7 +97,8 @@ local CustomOrder = {
         "CollectButtons", "Enable", "Ping", "Size"
     },
     ["Misc"] = {
-        "AFKCamera", "AlreadyKnown", "Armory", "BGSpam", "DurabilityWarninig", "EnhancedMail", "HatTrick", "InviteKeyword", "ItemLevel", "SpeedyLoad", "ProcGlow"
+        "AFKCamera", "AlreadyKnown", "Armory", "BGSpam", "DurabilityWarninig", 
+        "EnhancedMail", "HatTrick", "InviteKeyword", "ItemLevel", "SpeedyLoad", "ProcGlow"
     },
     ["Nameplate"] = {
         "AdditionalHeight", "AdditionalWidth", "AuraSize", "BadColor", "ClassIcons", "Combat",
@@ -207,63 +207,15 @@ end
 -- ============================================================
 -- Static Popups
 -- ============================================================
+local ProfileButton = NormalButton("Profiles", UIConfig)
 
-StaticPopupDialogs["PERCHAR"] = {
-    text = L_GUI_PER_CHAR,
-    OnAccept = function()
-        if UIConfigAllCharacters:GetChecked() then
-            VermilionDB.GUIConfigAll[realm][name] = true
-        else
-            VermilionDB.GUIConfigAll[realm][name] = false
-        end
-        ReloadUI()
-    end,
-    OnCancel = function()
-        UIConfigCover:Hide()
-        UIConfigAllCharacters:SetChecked(not UIConfigAllCharacters:GetChecked())
-    end,
-    button1 = ACCEPT,
-    button2 = CANCEL,
-    timeout = 0,
-    whileDead = 1,
-    preferredIndex = 3,
-}
+ProfileButton:SetSize(100, 22)
 
-StaticPopupDialogs["RESET_PERCHAR"] = {
-    text = L_GUI_RESET_CHAR,
-    OnAccept = function()
-        VermilionDB.GUIConfig = VermilionDB.GUIConfigSettings
-        ReloadUI()
-    end,
-    OnCancel = function()
-        if UIConfig and UIConfig:IsShown() then
-            UIConfigCover:Hide()
-        end
-    end,
-    button1 = ACCEPT,
-    button2 = CANCEL,
-    timeout = 0,
-    whileDead = 1,
-    preferredIndex = 3,
-}
+ProfileButton:SetPoint("LEFT", MoveUIButton, "RIGHT", 5, 0)
 
-StaticPopupDialogs["RESET_ALL"] = {
-    text = L_GUI_RESET_ALL,
-    OnAccept = function()
-        VermilionDB.GUIConfigSettings = nil
-        VermilionDB.GUIConfig = nil
-        ReloadUI()
-    end,
-    OnCancel = function()
-        UIConfigCover:Hide()
-    end,
-    button1 = ACCEPT,
-    button2 = CANCEL,
-    timeout = 0,
-    whileDead = 1,
-    preferredIndex = 3,
-}
-
+ProfileButton:SetScript("OnClick", function()
+    V.Profiles:Toggle()
+end)
 -- ============================================================
 -- SetValue - Core Setting Function
 -- ============================================================
@@ -276,21 +228,22 @@ function SetValue(group, option, value)
         C[group][option] = value
     end
 
-    -- 2. Save to profile database
-    if V and V.GetActiveProfile then
-        local profile = V.GetActiveProfile()
-        if profile and VermilionDB then
-            if not VermilionDB.Profiles then
-                VermilionDB.Profiles = {}
-            end
-            if not VermilionDB.Profiles[profile] then
-                VermilionDB.Profiles[profile] = {}
-            end
-            if not VermilionDB.Profiles[profile][group] then
-                VermilionDB.Profiles[profile][group] = {}
-            end
-            VermilionDB.Profiles[profile][group][option] = value
+    -- 2. Save to VermilionDB.Settings (ЭНЭ НЭМЭХ)
+    if VermilionDB and VermilionDB.Settings then
+        local realm = GetRealmName()
+        local name = UnitName("player")
+        
+        if not VermilionDB.Settings[realm] then
+            VermilionDB.Settings[realm] = {}
         end
+        if not VermilionDB.Settings[realm][name] then
+            VermilionDB.Settings[realm][name] = {}
+        end
+        if not VermilionDB.Settings[realm][name][group] then
+            VermilionDB.Settings[realm][name][group] = {}
+        end
+        print(group, option, value)
+        VermilionDB.Settings[realm][name][group][option] = value
     end
 
     -- 3. Update GUI element
@@ -312,65 +265,107 @@ function SetValue(group, option, value)
     end
 end
 
+
 -- ============================================================
 -- Config Window
 -- ============================================================
 
-local VISIBLE_GROUP = nil
-local lastbutton = nil
+local VISIBLE_GROUP
+local lastbutton
 
 local function ShowGroup(group, button)
     local V, _ = Vermilion:unpack()
+        local classColor = RAID_CLASS_COLORS and RAID_CLASS_COLORS[V.Class]
 
-    if lastbutton then
-        lastbutton:SetText(string.sub(lastbutton:GetText(), 11, -3))
+    if not classColor then
+        classColor = {
+            r = V.Color.r,
+            g = V.Color.g,
+            b = V.Color.b
+        }
     end
-    if VISIBLE_GROUP then
+if lastbutton and lastbutton ~= button then
+    lastbutton.Selected = false
+
+if lastbutton.GroupName then
+    lastbutton:SetText(format(
+        "|cff%02x%02x%02x%s|r",
+        classColor.r * 255,
+        classColor.g * 255,
+        classColor.b * 255,
+        lastbutton.GroupName
+    ))
+end
+
+    if lastbutton.SelectedBar then
+        lastbutton.SelectedBar:SetAlpha(0)
+    end
+
+    if lastbutton.Glow then
+        lastbutton.Glow:SetAlpha(0)
+    end
+end
+
+    if VISIBLE_GROUP and _G["UIConfig" .. VISIBLE_GROUP] then
         _G["UIConfig" .. VISIBLE_GROUP]:Hide()
     end
-    if _G["UIConfig" .. group] then
-        local o = "UIConfig" .. group
-        Local(o)
-        _G["UIConfigTitle"]:SetText(V.option)
-        
-        local height = _G["UIConfig" .. group]:GetHeight()
-        _G["UIConfig" .. group]:Show()
-        
-        local scrollamntmax = 600
-        local scrollamntmin = scrollamntmax - 10
-        local max = height > scrollamntmax and height - scrollamntmin or 1
 
-        if max == 1 then
-            _G["UIConfigGroupSlider"]:SetValue(1)
-            _G["UIConfigGroupSlider"]:Hide()
-        else
-            _G["UIConfigGroupSlider"]:SetMinMaxValues(0, max)
-            _G["UIConfigGroupSlider"]:Show()
-            _G["UIConfigGroupSlider"]:SetValue(1)
-        end
-        _G["UIConfigGroup"]:SetScrollChild(_G["UIConfig" .. group])
+    local frame = _G["UIConfig" .. group]
 
-        local x
-        if UIConfigGroupSlider:IsShown() then
-            _G["UIConfigGroup"]:EnableMouseWheel(true)
-            _G["UIConfigGroup"]:SetScript("OnMouseWheel", function(self, delta)
-                if UIConfigGroupSlider:IsShown() then
-                    if delta == -1 then
-                        x = _G["UIConfigGroupSlider"]:GetValue()
-                        _G["UIConfigGroupSlider"]:SetValue(x + 10)
-                    elseif delta == 1 then
-                        x = _G["UIConfigGroupSlider"]:GetValue()
-                        _G["UIConfigGroupSlider"]:SetValue(x - 30)
-                    end
-                end
-            end)
-        else
-            _G["UIConfigGroup"]:EnableMouseWheel(false)
-        end
-
-        VISIBLE_GROUP = group
-        lastbutton = button
+    if not frame then
+        return
     end
+
+    local o = "UIConfig" .. group
+    Local(o)
+
+    if _G["UIConfigTitle"] then
+        _G["UIConfigTitle"]:SetText(V.option)
+    end
+
+    frame:Show()
+
+if _G["UIConfigTitle"] then
+    _G["UIConfigTitle"]:SetText(
+        format(
+            "|cff%02x%02x%02x%s|r",
+            classColor.r * 255,
+            classColor.g * 255,
+            classColor.b * 255,
+            V.option
+        )
+    )
+end
+
+if button then
+
+    if lastbutton then
+        lastbutton.Selected = false
+
+        if lastbutton.Glow then
+            lastbutton.Glow:SetAlpha(0)
+        end
+    end
+
+    button.Selected = true
+
+    
+if button.SelectedBar then
+    button.SelectedBar:SetVertexColor(
+        classColor.r,
+        classColor.g,
+        classColor.b
+    )
+
+    button.SelectedBar:SetAlpha(1)
+end
+
+button:SetText("|cffffffff" .. (button.GroupName or V.option) .. "|r")
+
+end
+
+    VISIBLE_GROUP = group
+    lastbutton = button
 end
 
 local loaded
@@ -388,163 +383,172 @@ function CreateUIConfig()
         return
     end
 
-    -- ========================================================
-    -- Main Frame
-    -- ========================================================
-    local UIConfigMain = CreateFrame("Frame", "UIConfigMain", UIParent)
-    UIConfigMain:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, 200)
-    UIConfigMain:SetSize(780, 720)
-    UIConfigMain:SetBackdrop(V.Backdrop)
-    UIConfigMain:SetBackdropColor(unpack(C["Media"].Backdrop_Color))
-    UIConfigMain:SetBackdropBorderColor(V.Color.r, V.Color.g, V.Color.b)
-    UIConfigMain:SetFrameStrata("DIALOG")
-    UIConfigMain:SetFrameLevel(20)
-    tinsert(UISpecialFrames, "UIConfigMain")
+ -- ========================================================
+-- V2 Layout
+-- ========================================================
 
-    UIConfigMain:SetMovable(true)
-    UIConfigMain:EnableMouse(true)
-    UIConfigMain:RegisterForDrag("LeftButton")
-    UIConfigMain:SetScript("OnDragStart", function(self) self:StartMoving() end)
-    UIConfigMain:SetScript("OnDragStop", function(self) self:StopMovingOrSizing() end)
+local categoryCount = 0
+for _ in pairs(ALLOWED_GROUPS) do
+    categoryCount = categoryCount + 1
+end
 
-    -- Title Bar
-    local TitleBoxVer = CreateFrame("Frame", "TitleBoxVer", UIConfigMain)
-    TitleBoxVer:SetSize(180, 24)
-    TitleBoxVer:SetPoint("TOPLEFT", UIConfigMain, "TOPLEFT", 23, -15)
-    local TitleBoxVerText = TitleBoxVer:CreateFontString("UIConfigTitleVer", "OVERLAY", "GameFontNormal")
-    TitleBoxVerText:SetPoint("CENTER")
-    TitleBoxVerText:SetText("|cffe60000Vermilion|r")
+local CATEGORY_W = 150
+local CATEGORY_H = 22
+local CATEGORY_GAP = 4
 
-    local TitleBox = CreateFrame("Frame", "TitleBox", UIConfigMain)
-    TitleBox:SetSize(540, 24)
-    TitleBox:SetPoint("TOPLEFT", TitleBoxVer, "TOPRIGHT", 15, 0)
-    local TitleBoxText = TitleBox:CreateFontString("UIConfigTitle", "OVERLAY", "GameFontNormal")
-    TitleBoxText:SetPoint("LEFT", TitleBox, "LEFT", 15, 0)
+local HEADER_H = 28
 
-    -- Options Frame
-    local UIConfig = CreateFrame("Frame", "UIConfig", UIConfigMain)
-    UIConfig:SetPoint("TOPLEFT", TitleBox, "BOTTOMLEFT", 10, -15)
-    UIConfig:SetSize(520, 600)
+local FOOTER_H = 28
+local PAD = 8
 
-    local UIConfigBG = CreateFrame("Frame", "UIConfigBG", UIConfig)
-    UIConfigBG:SetPoint("TOPLEFT", -10, 10)
-    UIConfigBG:SetPoint("BOTTOMRIGHT", 10, -10)
+local totalCategoryH =
+    categoryCount * CATEGORY_H +
+    (categoryCount - 1) * CATEGORY_GAP
 
-    -- Category Group Frame
-    local groups = CreateFrame("ScrollFrame", "UIConfigCategoryGroup", UIConfig)
-    groups:SetPoint("TOP", TitleBoxVer, "BOTTOM", 10, -15)
-    groups:SetSize(140, 600)
+local OPTION_W = 550
 
-    local groupsBG = CreateFrame("Frame", "groupsBG", UIConfig)
-    groupsBG:SetPoint("TOPLEFT", groups, -10, 10)
-    groupsBG:SetPoint("BOTTOMRIGHT", groups, 10, -10)
+local MAIN_W =
+    CATEGORY_W +
+    OPTION_W +
+    PAD * 4
+local HEADER_W = CATEGORY_W + PAD + OPTION_W
+local MAIN_H =
+    HEADER_H +
+    totalCategoryH +
+    FOOTER_H +
+    PAD * 4
 
-    local UIConfigCover = CreateFrame("Frame", "UIConfigCover", UIConfigMain)
-    UIConfigCover:SetPoint("TOPLEFT", 0, 0)
-    UIConfigCover:SetPoint("BOTTOMRIGHT", 0, 0)
-    UIConfigCover:SetFrameLevel(UIConfigMain:GetFrameLevel() + 20)
-    UIConfigCover:EnableMouse(true)
-    UIConfigCover:SetScript("OnMouseDown", function(self) print(L_GUI_MAKE_SELECTION) end)
-    UIConfigCover:Hide()
+-- ========================================================
+-- Main Frame
+-- ========================================================
 
-    -- Category Slider
-    local slider = CreateFrame("Slider", "UIConfigCategorySlider", groups)
-    slider:SetPoint("TOPRIGHT", 0, 0)
-    slider:SetSize(20, 600)
-    slider:SetThumbTexture("Interface\\Buttons\\UI-ScrollBar-Knob")
-    slider:SetOrientation("VERTICAL")
-    slider:SetValueStep(20)
-    slider:SetScript("OnValueChanged", function(self, value) groups:SetVerticalScroll(value) end)
+local   UIConfigMain = CreateFrame("Frame", "UIConfigMain", UIParent)
+        UIConfigMain:SetPoint("CENTER")
+        UIConfigMain:SetSize(MAIN_W, MAIN_H)
+        --UIConfigMain:SetBackdrop(V.Backdrop)
+        --UIConfigMain:SetBackdropColor(unpack(C.Media.Backdrop_Color))
+        --UIConfigMain:SetBackdropBorderColor(V.Color.r, V.Color.g, V.Color.b)
+        UIConfigMain:SetFrameStrata("DIALOG")
+        UIConfigMain:SetFrameLevel(20)
+        --UIConfigMain:CreateBorder()
+        tinsert(UISpecialFrames, "UIConfigMain")
+        UIConfigMain:SetMovable(true)
+        UIConfigMain:EnableMouse(true)
+        UIConfigMain:RegisterForDrag("LeftButton")
+        UIConfigMain:SetScript("OnDragStart", function(self) self:StartMoving() end)
+        UIConfigMain:SetScript("OnDragStop", function(self) self:StopMovingOrSizing() end)
+-- ========================================================
+-- Header
+-- ========================================================
 
-    if not slider.bg then
-        slider.bg = CreateFrame("Frame", nil, slider)
-        slider.bg:SetPoint("TOPLEFT", slider:GetThumbTexture(), "TOPLEFT", 10, -7)
-        slider.bg:SetPoint("BOTTOMRIGHT", slider:GetThumbTexture(), "BOTTOMRIGHT", -7, 7)
-        slider:GetThumbTexture():SetAlpha(0)
+local Header = CreateFrame("Frame", nil, UIConfigMain)
+Header:SetPoint("TOPLEFT", PAD, -PAD)
+Header:SetSize(HEADER_W, HEADER_H)
+Header:CreateBorder()
+local bg = Header:CreateTexture(nil, "BACKGROUND")
+bg:SetPoint("TOPLEFT", -1, 1)
+bg:SetPoint("BOTTOMRIGHT", 1, -1)
+bg:SetTexture("Interface\\Buttons\\WHITE8X8")
+bg:SetVertexColor(0, 0, 0, 0.7)
+
+local Logo = Header:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+Logo:SetPoint("LEFT", 10, 0)
+Logo:SetText("|cffe60000Vermilion|r")
+Logo:SetFont(C.Media.Font, 18, "OUTLINE")
+local   TitleBoxText = Header:CreateFontString("UIConfigTitle", "OVERLAY", "GameFontNormal")
+        TitleBoxText:SetPoint("CENTER")
+        TitleBoxText:SetFont(C.Media.Font, 18, C.Media.Font_Style)
+local   CloseButton = V.CreateCloseButton(Header, 24, 24, 24)
+        CloseButton:SetPoint("RIGHT", -4, 0)
+        CloseButton:SetScript("OnClick", function() UIConfigMain:Hide() end)
+
+-- ========================================================
+-- Category Area
+-- ========================================================
+
+local groups = CreateFrame("Frame", "UIConfigCategoryGroup", UIConfigMain)
+groups:SetPoint("TOPLEFT", Header, "BOTTOMLEFT", 0, -PAD)
+groups:SetSize(CATEGORY_W, totalCategoryH)
+
+--groups:CreateBorder()
+--local bg = groups:CreateTexture(nil, "BACKGROUND")
+--bg:SetAllPoints()
+--bg:SetTexture("Interface\\Buttons\\WHITE8X8")
+--bg:SetVertexColor(0, 0, 0, 0.7)
+-- ========================================================
+-- Option Area
+-- ========================================================
+local   UIConfig = CreateFrame("Frame", "UIConfig", UIConfigMain)
+        UIConfig:SetPoint("TOPLEFT", groups, "TOPRIGHT", PAD, 0)
+        UIConfig:SetSize(OPTION_W, totalCategoryH)
+UIConfig:CreateBorder()
+
+local bg = UIConfig:CreateTexture(nil, "BACKGROUND")
+bg:SetAllPoints()
+bg:SetTexture("Interface\\Buttons\\WHITE8X8")
+bg:SetVertexColor(0, 0, 0, 0.7)
+-- ========================================================
+-- Category Sorting
+-- ========================================================
+local function sortMyTable(a, b)
+    return ALLOWED_GROUPS[a] < ALLOWED_GROUPS[b]
+end
+local function pairsByKey(t)
+    local a = {}
+    for n in pairs(t) do
+        table.insert(a, n)
     end
-
-    -- Build category list
-    local function sortMyTable(a, b)
-        return ALLOWED_GROUPS[a] < ALLOWED_GROUPS[b]
-    end
-
-    local function pairsByKey(t, f)
-        local a = {}
-        for n in pairs(t) do tinsert(a, n) end
-        table.sort(a, sortMyTable)
-        local i = 0
-        local iter = function()
-            i = i + 1
-            if a[i] == nil then return nil
-            else return a[i], t[a[i]] end
+    table.sort(a, sortMyTable)
+    local i = 0
+    return function()
+        i = i + 1
+        if a[i] then
+            return a[i], t[a[i]]
         end
-        return iter
     end
+end
+-- ========================================================
+-- Category Build
+-- ========================================================
 
-    local child = CreateFrame("Frame", nil, groups)
-    child:SetPoint("TOPLEFT")
-    local offset = 5
-    
-    for i in pairsByKey(ALLOWED_GROUPS) do
-        local o = "UIConfig" .. i
-        Local(o)
-        local button = NewButton(V.option, child)
-        button:SetSize(125, 16)
-        button:SetPoint("TOPLEFT", 5, -offset)
-        button:SetScript("OnClick", function(self)
-            ShowGroup(i, button)
-            self:SetText(format("|cff%02x%02x%02x%s|r", V.Color.r * 255, V.Color.g * 255, V.Color.b * 255, V.option))
-        end)
-        offset = offset + 20
-    end
-    
-    child:SetSize(125, offset)
-    slider:SetValue(1)
-    groups:SetScrollChild(child)
+local child = CreateFrame("Frame", nil, groups)
+child:SetAllPoints()
 
-    local x
-    _G["UIConfigCategoryGroup"]:EnableMouseWheel(true)
-    _G["UIConfigCategoryGroup"]:SetScript("OnMouseWheel", function(self, delta)
-        if _G["UIConfigCategorySlider"]:IsShown() then
-            if delta == -1 then
-                x = _G["UIConfigCategorySlider"]:GetValue()
-                _G["UIConfigCategorySlider"]:SetValue(x + 10)
-            elseif delta == 1 then
-                x = _G["UIConfigCategorySlider"]:GetValue()
-                _G["UIConfigCategorySlider"]:SetValue(x - 20)
-            end
+local offset = 0
+for i in pairsByKey(ALLOWED_GROUPS) do
+    local o = "UIConfig" .. i
+    Local(o)
+    local   button = NewButton(V.option, child)
+            button.GroupName = V.option
+            button:SetText(format("|cff%02x%02x%02x%s|r", V.Color.r * 255, V.Color.g * 255, V.Color.b * 255, V.option))
+            button.SelectedBar = button:CreateTexture(nil, "BORDER")
+            button.SelectedBar:SetTexture("Interface\\TargetingFrame\\UI-StatusBar")
+            button.SelectedBar:SetAllPoints(button)
+            button.SelectedBar:SetAlpha(0)
+            button:SetSize(CATEGORY_W, CATEGORY_H)
+            button:SetPoint("TOPLEFT", 0, -offset)
+            button:SetScript("OnClick", function(self) ShowGroup(i, button)
+            
+            
         end
-    end)
-
-    -- Options Scroll Frame
-    local group = CreateFrame("ScrollFrame", "UIConfigGroup", UIConfig)
-    group:SetPoint("TOPLEFT", 0, 5)
-    group:SetSize(520, 600)
-
-    local optionSlider = CreateFrame("Slider", "UIConfigGroupSlider", group)
-    optionSlider:SetPoint("TOPRIGHT", 0, 0)
-    optionSlider:SetSize(20, 600)
-    optionSlider:SetThumbTexture("Interface\\Buttons\\UI-ScrollBar-Knob")
-    optionSlider:SetOrientation("VERTICAL")
-    optionSlider:SetValueStep(20)
-    optionSlider:SetScript("OnValueChanged", function(self, value) group:SetVerticalScroll(value) end)
+    )
+    button:SetSize(CATEGORY_W - 0, 22)
+    V.StyleConfigButton(button)
+    offset = offset + CATEGORY_H + CATEGORY_GAP
+end
 
     -- Build option frames
     for i in pairs(ALLOWED_GROUPS) do
         if i ~= "Profiles" then
-            local frame = CreateFrame("Frame", "UIConfig" .. i, UIConfigGroup)
-            frame:SetPoint("TOPLEFT")
+            local frame = CreateFrame("Frame", "UIConfig" .. i, UIConfig)
+            frame:SetPoint("TOPLEFT", UIConfig, "TOPLEFT", 10, -10)
             frame:SetWidth(225)
-
             local offset = 5
-
             if type(C[i]) ~= "table" then
                 Error(i .. " GroupName not found in config table.")
                 return
             end
-
             local sortedKeys = {}
-            
             if CustomOrder[i] then
                 for _, keyName in ipairs(CustomOrder[i]) do
                     if C[i][keyName] ~= nil then
@@ -694,348 +698,109 @@ function CreateUIConfig()
         end
     end
 
-    -- ========================================================
-    -- Profiles Frame
-    -- ========================================================
-    local function UpdateProfileList()
-        local V, C, L, _ = Vermilion:unpack()
-        if not _G["UIConfigProfiles"] then return end
-        
-        local frame = _G["UIConfigProfiles"]
-        if frame.dynamicElements then
-            for _, el in pairs(frame.dynamicElements) do
-                if el.Hide then el:Hide() end
-            end
-        end
-        frame.dynamicElements = {}
-        
-        local activeProfile = V.GetActiveProfile()
-        local offset = 10
+-- ========================================================
+-- Buttons
+-- ========================================================
+local BUTTON_W = 114
+local BUTTON_H = 24
+local function CreateFooterButton(text, parent)
+    local V, C = Vermilion:unpack()
 
-        -- Profile Dropdown
-        if not frame.profileDropdown then
-            local dropdownLabel = frame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-            dropdownLabel:SetPoint("TOPLEFT", 10, -offset)
-            dropdownLabel:SetText("Active Profile:")
-            frame.dropdownLabel = dropdownLabel
-            
-            local dropdown = CreateFrame("Frame", "VermilionProfileDropdown", frame, "UIDropDownMenuTemplate")
-            dropdown:SetPoint("TOPLEFT", 0, -(offset + 18))
-            UIDropDownMenu_SetWidth(dropdown, 250)
-            frame.profileDropdown = dropdown
-        end
-        
-        UIDropDownMenu_SetText(frame.profileDropdown, "|cff388bdb" .. activeProfile .. "|r")
-        UIDropDownMenu_Initialize(frame.profileDropdown, function(self, level)
-            local info = UIDropDownMenu_CreateInfo()
-            for pName, _ in pairs(VermilionDB.Profiles) do
-                info.text = pName
-                info.checked = (pName == activeProfile)
-                info.func = function()
-                    V.SetProfile(pName)
-                    ReloadUI()
-                end
-                UIDropDownMenu_AddButton(info, level)
-            end
-        end)
-        offset = offset + 60
+    local button = CreateFrame("Button", nil, parent)
+    button:SetSize(BUTTON_W, BUTTON_H)
 
-        -- Create New Profile
-        if not frame.createLabel then
-            local lbl = frame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-            lbl:SetPoint("TOPLEFT", 10, -offset)
-            lbl:SetText("Create New Profile")
-            frame.createLabel = lbl
-        else
-            frame.createLabel:SetPoint("TOPLEFT", 10, -offset)
-        end
-        offset = offset + 18
-        
-        if not frame.createEdit then
-            local edit = CreateFrame("EditBox", nil, frame)
-            edit:SetSize(220, 20)
-            edit:SetAutoFocus(false)
-            edit:SetFontObject(GameFontHighlight)
-            edit:SetBackdrop(V.Backdrop)
-            edit:SetBackdropColor(0, 0, 0, 0.5)
-            edit:SetBackdropBorderColor(unpack(C["Media"].Border_Color))
-            edit:SetTextInsets(5, 5, 0, 0)
-            frame.createEdit = edit
-            
-            local btn = NormalButton("Create", frame)
-            btn:SetSize(100, 22)
-            btn:SetScript("OnClick", function()
-                local newName = frame.createEdit:GetText()
-                if newName and newName ~= "" and not VermilionDB.Profiles[newName] then
-                    V.CreateProfile(newName, activeProfile)
-                    frame.createEdit:SetText("")
-                    Print("|cff388bdb" .. newName .. "|r created.")
-                    UpdateProfileList()
-                end
-            end)
-            frame.createBtn = btn
-        end
-        frame.createEdit:SetPoint("TOPLEFT", 20, -offset)
-        frame.createBtn:SetPoint("LEFT", frame.createEdit, "RIGHT", 5, 0)
-        offset = offset + 30
+    local label = button:CreateFontString(nil, "OVERLAY")
+    label:SetFont(C.Media.Font, 12, C.Media.Font_Style)
+    label:SetPoint("CENTER")
+    label:SetText(text)
 
-        -- Rename Profile
-        if not frame.renameLabel then
-            local lbl = frame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-            lbl:SetText("Rename Profile")
-            frame.renameLabel = lbl
-        end
-        frame.renameLabel:SetPoint("TOPLEFT", 10, -offset)
-        offset = offset + 18
-        
-        if not frame.renameEdit then
-            local edit = CreateFrame("EditBox", nil, frame)
-            edit:SetSize(220, 20)
-            edit:SetAutoFocus(false)
-            edit:SetFontObject(GameFontHighlight)
-            edit:SetBackdrop(V.Backdrop)
-            edit:SetBackdropColor(0, 0, 0, 0.5)
-            edit:SetBackdropBorderColor(unpack(C["Media"].Border_Color))
-            edit:SetTextInsets(5, 5, 0, 0)
-            frame.renameEdit = edit
-            
-            local btn = NormalButton("Rename", frame)
-            btn:SetSize(100, 22)
-            btn:SetScript("OnClick", function()
-                local newName = frame.renameEdit:GetText()
-                if newName and newName ~= "" and newName ~= activeProfile then
-                    if V.RenameProfile(activeProfile, newName) then
-                        Print("|cff388bdb" .. activeProfile .. "|r renamed to |cff388bdb" .. newName .. "|r.")
-                        ReloadUI()
-                    else
-                        Print("|cffff0000Rename failed.|r")
-                    end
-                end
-            end)
-            frame.renameBtn = btn
-        end
-        frame.renameEdit:SetPoint("TOPLEFT", 20, -offset)
-        frame.renameEdit:SetText(activeProfile)
-        frame.renameBtn:SetPoint("LEFT", frame.renameEdit, "RIGHT", 5, 0)
-        offset = offset + 35
+    button:SetFontString(label)
 
-        -- Save Profile
-        if not frame.saveBtn then
-            local btn = NormalButton("Save Profile", frame)
-            btn:SetWidth(330)
-            btn:SetHeight(22)
-            btn:SetScript("OnClick", function()
-                if V.SaveProfile() then
-                    Print("|cff388bdb" .. activeProfile .. "|r saved.")
-                end
-            end)
-            frame.saveBtn = btn
-        end
-        frame.saveBtn:SetPoint("TOPLEFT", 20, -offset)
-        offset = offset + 30
+    V.StyleConfigButton(button)
 
-        -- Delete Profile
-        if not frame.deleteBtn then
-            local btn = NormalButton("|cffff0000Delete Profile|r", frame)
-            btn:SetWidth(330)
-            btn:SetHeight(22)
-            btn:SetScript("OnClick", function()
-                local profileCount = 0
-                for _ in pairs(VermilionDB.Profiles) do profileCount = profileCount + 1 end
-                if profileCount <= 1 then
-                    Print("|cffff0000Cannot delete the last profile.|r")
-                    return
-                end
-                StaticPopupDialogs["VERMILION_DELETE_PROFILE"] = {
-                    text = "Delete profile |cff388bdb" .. activeProfile .. "|r?\n\nThis cannot be undone.",
-                    button1 = ACCEPT,
-                    button2 = CANCEL,
-                    OnAccept = function()
-                        V.DeleteProfile(activeProfile)
-                        for pName, _ in pairs(VermilionDB.Profiles) do
-                            V.SetProfile(pName)
-                            break
-                        end
-                        ReloadUI()
-                    end,
-                    timeout = 0,
-                    whileDead = 1,
-                    hideOnEscape = true,
-                    preferredIndex = 3,
-                }
-                StaticPopup_Show("Vermilion_DELETE_PROFILE")
-            end)
-            frame.deleteBtn = btn
-        end
-        frame.deleteBtn:SetPoint("TOPLEFT", 20, -offset)
-        offset = offset + 40
-
-        -- Import/Export
-        if not frame.ioLabel then
-            local lbl = frame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-            lbl:SetText("Import / Export")
-            frame.ioLabel = lbl
-        end
-        frame.ioLabel:SetPoint("TOPLEFT", 10, -offset)
-        offset = offset + 18
-        
-        if not frame.ioBox then
-            local scrollFrame = CreateFrame("ScrollFrame", "VermilionProfileIOScroll", frame, "UIPanelScrollFrameTemplate")
-            scrollFrame:SetSize(330, 80)
-            scrollFrame:SetBackdrop(V.Backdrop)
-            scrollFrame:SetBackdropColor(0, 0, 0, 0.5)
-            scrollFrame:SetBackdropBorderColor(unpack(C["Media"].Border_Color))
-            frame.ioScroll = scrollFrame
-            
-            local editBox = CreateFrame("EditBox", "VermilionProfileIOEdit", scrollFrame)
-            editBox:SetMultiLine(true)
-            editBox:SetAutoFocus(false)
-            editBox:SetFontObject(GameFontHighlightSmall)
-            editBox:SetWidth(310)
-            editBox:SetTextInsets(5, 5, 5, 5)
-            editBox:SetScript("OnEscapePressed", function(self) self:ClearFocus() end)
-            scrollFrame:SetScrollChild(editBox)
-            frame.ioBox = editBox
-        end
-        frame.ioScroll:SetPoint("TOPLEFT", 20, -offset)
-        offset = offset + 90
-        
-        if not frame.exportBtn then
-            local btn = NormalButton("Export", frame)
-            btn:SetSize(160, 22)
-            btn:SetScript("OnClick", function()
-                local data = V.ExportProfile(activeProfile)
-                if data then
-                    frame.ioBox:SetText(data)
-                    frame.ioBox:HighlightText()
-                    frame.ioBox:SetFocus()
-                    Print("Profile exported.")
-                end
-            end)
-            frame.exportBtn = btn
-        end
-        frame.exportBtn:SetPoint("TOPLEFT", 20, -offset)
-        
-        if not frame.importBtn then
-            local btn = NormalButton("Import", frame)
-            btn:SetSize(160, 22)
-            btn:SetScript("OnClick", function()
-                local data = frame.ioBox:GetText()
-                if data and data ~= "" then
-                    local importName = activeProfile .. " (Import)"
-                    if V.ImportProfile(importName, data) then
-                        V.SetProfile(importName)
-                        Print("|cff388bdb" .. importName .. "|r imported.")
-                        ReloadUI()
-                    else
-                        Print("|cffff0000Import failed.|r")
-                    end
-                end
-            end)
-            frame.importBtn = btn
-        end
-        frame.importBtn:SetPoint("LEFT", frame.exportBtn, "RIGHT", 10, 0)
-        offset = offset + 30
-
-        if not frame.ioHint then
-            local lbl = frame:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
-            lbl:SetText("Ctrl+C = Copy, Ctrl+V = Paste")
-            lbl:SetJustifyH("LEFT")
-            lbl:SetTextColor(0.8, 0.8, 0.8)
-            frame.ioHint = lbl
-        end
-        frame.ioHint:SetPoint("TOPLEFT", 20, -offset)
-        offset = offset + 35
-        
-        frame:SetHeight(offset + 20)
-    end
-
-    local profilesFrame = CreateFrame("Frame", "UIConfigProfiles", UIConfigGroup)
-    profilesFrame:SetPoint("TOPLEFT")
-    profilesFrame:SetSize(520, 500)
-    profilesFrame:Hide()
-    profilesFrame:SetScript("OnShow", UpdateProfileList)
-
-    -- ========================================================
-    -- Buttons
-    -- ========================================================
-    local reset = NormalButton(DEFAULT, UIConfigMain)
-    reset:SetPoint("TOPLEFT", UIConfig, "BOTTOMLEFT", 30, -25)
-    reset:SetScript("OnClick", function(self)
-        UIConfigCover:Show()
-        if VermilionDB.GUIConfigAll[realm][name] == true then
-            StaticPopup_Show("RESET_PERCHAR")
-        else
-            StaticPopup_Show("RESET_ALL")
-        end
-    end)
-
-    local close = NormalButton(CLOSE, UIConfigMain)
-    close:SetPoint("TOPRIGHT", UIConfig, "BOTTOMRIGHT", 10, -25)
-    close:SetScript("OnClick", function(self)
-        PlaySound("igMainMenuOption")
-        UIConfigMain:Hide()
-    end)
-
-    local load = NormalButton(APPLY, UIConfigMain)
-    load:SetPoint("RIGHT", close, "LEFT", -4, 0)
-    load:SetScript("OnClick", function(self)
-        ReloadUI()
-    end)
-
-    local totalreset = NormalButton(L_GUI_BUTTON_RESET or "Reset", UIConfigMain)
-    totalreset:SetWidth(120)
-    totalreset:SetPoint("TOPLEFT", groupsBG, "BOTTOMLEFT", 0, -15)
-    totalreset:SetScript("OnClick", function(self)
-        VermilionDB.GUIConfig = {}
-        if VermilionDB.GUIConfigAll[realm][name] == true then
-            VermilionDB.GUIConfigAll[realm][name] = {}
-        end
-        VermilionDB.GUIConfigSettings = {}
-    end)
-
-    local movers = NormalButton("Move UI", UIConfigMain)
-    movers:SetWidth(90)
-    movers:SetPoint("LEFT", totalreset, "RIGHT", 4, 0)
-    movers:SetScript("OnClick", function()
-        if SlashCmdList.MOVING then
-            SlashCmdList.MOVING("")
-        end
-    end)
-
-    -- Per-character checkbox
-    if VermilionDB.GUIConfigAll then
-        local button = CreateFrame("CheckButton", "UIConfigAllCharacters", TitleBox, "InterfaceOptionsCheckButtonTemplate")
-        button:SetScript("OnClick", function(self)
-            StaticPopup_Show("PERCHAR")
-            UIConfigCover:Show()
-        end)
-        button:SetPoint("RIGHT", TitleBox, "RIGHT", -3, 0)
-        button:SetHitRectInsets(0, 0, 0, 0)
-
-        local label = button:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-        label:SetText("Per Character")
-        label:SetPoint("RIGHT", button, "LEFT")
-
-        if VermilionDB.GUIConfigAll[realm][name] == true then
-            button:SetChecked(true)
-        else
-            button:SetChecked(false)
-        end
-    end
-
-    -- Background styling
-    local bgSkins = {TitleBox, TitleBoxVer, UIConfigBG, groupsBG}
-    for _, sb in pairs(bgSkins) do
-        sb:SetBackdrop(V.Backdrop)
-        sb:SetBackdropColor(unpack(C["Media"].Backdrop_Color))
-        sb:SetBackdropBorderColor(unpack(C["Media"].Border_Color))
-    end
-
-    ShowGroup("General")
-    loaded = true
+    return button
 end
+local reset = CreateFooterButton(DEFAULT, UIConfigMain)
+reset:SetPoint("TOPLEFT", groups, "BOTTOMLEFT", 0, -6)
+reset:SetScript("OnClick", function()
 
+    StaticPopupDialogs["VERMILION_RESET_PROFILE"] = {
+        text = "Reset current profile settings?",
+        button1 = YES,
+        button2 = NO,
+        OnAccept = function()
+            local realm = GetRealmName()
+            local name = UnitName("player")
+
+            if VermilionDB.Settings
+                and VermilionDB.Settings[realm]
+                and VermilionDB.Settings[realm][name] then
+                VermilionDB.Settings[realm][name] = {}
+            end
+
+            ReloadUI()
+        end,
+        timeout = 0,
+        whileDead = true,
+        hideOnEscape = true,
+    }
+
+    StaticPopup_Show("VERMILION_RESET_PROFILE")
+end)
+
+local totalreset = CreateFooterButton("Reset All", UIConfigMain)
+totalreset:SetPoint("LEFT", reset, "RIGHT", 5, 0)
+totalreset:SetScript("OnClick", function()
+
+    StaticPopupDialogs["VERMILION_RESET_ALL"] = {
+        text = "Reset ALL Vermilion settings?",
+        button1 = YES,
+        button2 = NO,
+        OnAccept = function()
+            VermilionDB.Settings = {}
+            ReloadUI()
+        end,
+        timeout = 0,
+        whileDead = true,
+        hideOnEscape = true,
+    }
+
+    StaticPopup_Show("VERMILION_RESET_ALL")
+end)
+
+local movers = CreateFooterButton("Move UI", UIConfigMain)
+movers:SetPoint("LEFT", totalreset, "RIGHT", 4, 0)
+movers:SetScript("OnClick", function()
+    if SlashCmdList.MOVING then
+        SlashCmdList.MOVING("")
+    end
+end)
+
+local ProfileButton = CreateFooterButton("Profiles", UIConfigMain)
+ProfileButton:SetPoint("LEFT", movers, "RIGHT", 5, 0)
+ProfileButton:SetScript("OnClick", function()
+    local V, _ = Vermilion:unpack()
+
+    if V.Profiles and V.Profiles.Toggle then
+        V.Profiles:Toggle()
+    elseif V.LoadProfiles then
+        V.LoadProfiles()
+    end
+end)
+
+local close = CreateFooterButton(CLOSE, UIConfigMain)
+close:SetPoint("TOPRIGHT", UIConfig, "BOTTOMRIGHT", 0, -6)
+close:SetScript("OnClick", function()
+    PlaySound("igMainMenuOption")
+    UIConfigMain:Hide()
+end)
+
+local load = CreateFooterButton(APPLY, UIConfigMain)
+load:SetPoint("RIGHT", close, "LEFT", -4, 0)
+load:SetScript("OnClick", function()
+    ReloadUI()
+end)
+end
 -- ============================================================
 -- Slash Commands
 -- ============================================================
@@ -1043,7 +808,7 @@ end
 SLASH_CONFIG1 = "/config"
 SLASH_CONFIG2 = "/cfg"
 SLASH_CONFIG3 = "/configui"
-SLASH_CONFIG4 = "/kc"
+SLASH_CONFIG4 = "/Vc"
 SLASH_CONFIG5 = "/Vermilion"
 
 function SlashCmdList.CONFIG(msg, editbox)
@@ -1054,20 +819,6 @@ function SlashCmdList.CONFIG(msg, editbox)
     else
         PlaySound("igMainMenuOption")
         UIConfigMain:Hide()
-    end
-end
-
-SLASH_RESETCONFIG1 = "/resetconfig"
-
-function SlashCmdList.RESETCONFIG()
-    if UIConfigMain and UIConfigMain:IsShown() then
-        UIConfigCover:Show()
-    end
-
-    if VermilionDB.GUIConfigAll[realm][name] == true then
-        StaticPopup_Show("RESET_PERCHAR")
-    else
-        StaticPopup_Show("RESET_ALL")
     end
 end
 
@@ -1115,33 +866,305 @@ InterfaceOptions_AddCategory(frame)
 -- ============================================================
 -- Game Menu Button
 -- ============================================================
-
+local V, C, L, _ = Vermilion:unpack()
 local UIConfigButton = CreateFrame("Frame")
 UIConfigButton:RegisterEvent("PLAYER_LOGIN")
-UIConfigButton:SetScript("OnEvent", function(self, event)
+UIConfigButton:SetScript("OnEvent", function(self)
     local Menu = GameMenuFrame
-    local Continue = GameMenuButtonContinue
-    local ContinueX = Continue:GetWidth()
-    local ContinueY = Continue:GetHeight()
-    local Interface = GameMenuButtonUIOptions
-    local KeyBinds = GameMenuButtonKeybindings
-
-    Menu:SetHeight(GameMenuFrame:GetHeight() + 21)
-
-    local button = CreateFrame("BUTTON", "GameMenuVermilionButton", Menu, "GameMenuButtonTemplate")
-    button:SetSize(ContinueX, ContinueY)
-    button:SetPoint("TOP", Interface, "BOTTOM", 0, -1)
-    button:SetText("|cffe60000Vermilion|r")
-
-    button:SetScript("OnClick", function(self)
+    -- Remove Blizzard textures
+    for i = 1, Menu:GetNumRegions() do
+        local region = select(i, Menu:GetRegions())
+        if region and region:GetObjectType() == "Texture" then
+            region:SetTexture(nil)
+        end
+    end
+    -- Menu backdrop
+    Menu:SetBackdrop({bgFile = "Interface\\Buttons\\WHITE8X8", edgeFile = "Interface\\Buttons\\WHITE8X8", edgeSize = 3,})
+    Menu:SetBackdropColor(0.05, 0.05, 0.05, 0.0)
+    Menu:SetBackdropBorderColor(0.2, 0.2, 0.2, 0)
+    -- Create Vermilion button
+    local VermilionButton = CreateFrame("Button", "GameMenuVermilionButton", Menu)
+    VermilionButton:SetScript("OnClick", function()
+        HideUIPanel(GameMenuFrame)
         if UIConfigMain and UIConfigMain:IsShown() then
             UIConfigMain:Hide()
         else
             CreateUIConfig()
-            HideUIPanel(Menu)
         end
     end)
+    local text = VermilionButton:CreateFontString(nil, "OVERLAY")
+text:SetFont(C.Media.Font, 12, C.Media.Font_Style)
+text:SetPoint("CENTER")
+text:SetText("Vermilion")
+VermilionButton:SetFontString(text)
+local Width = GameMenuButtonOptions:GetWidth()
+local Height = GameMenuButtonOptions:GetHeight()
+local MoversButton = CreateFrame("Button", "GameMenuMoversButton", Menu)
 
-    KeyBinds:ClearAllPoints()
-    KeyBinds:SetPoint("TOP", button, "BOTTOM", 0, -1)
+local MoversText = MoversButton:CreateFontString(nil, "OVERLAY")
+MoversText:SetFont(C.Media.Font, 12, C.Media.Font_Style)
+MoversText:SetPoint("CENTER")
+MoversText:SetText("Move UI")
+
+MoversButton:SetFontString(MoversText)
+
+V.StyleConfigButton(MoversButton)
+
+MoversButton:SetScript("OnClick", function()
+    HideUIPanel(GameMenuFrame)
+    SlashCmdList.MOVING()
+end)
+
+local text = AddonListButton:CreateFontString(nil, "OVERLAY")
+text:SetFont(C.Media.Font, 12, C.Media.Font_Style)
+text:SetPoint("CENTER")
+text:SetText(L_ADDON_LIST)
+AddonListButton:SetFontString(text)
+
+
+    local Buttons = {
+        GameMenuButtonOptions,
+        GameMenuButtonSoundOptions,
+        GameMenuButtonUIOptions,
+        VermilionButton,
+        AddonListButton,
+        MoversButton,
+        GameMenuButtonKeybindings,
+        GameMenuButtonMacros,
+        GameMenuButtonLogout,
+        GameMenuButtonQuit,
+        
+        GameMenuButtonContinue,
+        
+    }
+for _, Button in ipairs(Buttons) do
+    Button:SetNormalTexture(nil)
+    Button:SetPushedTexture(nil)
+    Button:SetHighlightTexture(nil)
+    Button:SetDisabledTexture(nil)
+    V.StyleConfigButton(Button)
+end
+    local Width = 160
+    local Height = 26
+    
+    for i, Button in ipairs(Buttons) do
+        Button:SetSize(Width, Height)
+        Button:ClearAllPoints()
+        if i == 1 then
+            Button:SetPoint("TOP", Menu, "TOP", 0, -8)
+        else
+            Button:SetPoint("TOP", Buttons[i - 1], "BOTTOM", 0, -4)
+        end
+        V.StyleConfigButton(Button)
+    end
+    -- Resize menu automatically
+    local TotalHeight =
+        20 +
+        (#Buttons * Height) +
+        ((#Buttons - 1) * 4) +
+        0
+    Menu:SetHeight(TotalHeight)
+
+    if GameMenuFrameHeader then
+        GameMenuFrameHeader:ClearAllPoints()
+        GameMenuFrameHeader:SetAlpha(0)
+    end
+    self:UnregisterEvent("PLAYER_LOGIN")
+end)
+
+-- ============================================================
+-- Macro Frame
+-- ============================================================
+
+local MacroSkin = CreateFrame("Frame")
+MacroSkin:RegisterEvent("ADDON_LOADED")
+
+MacroSkin:SetScript("OnEvent", function(self, _, addon)
+
+    if addon ~= "Blizzard_MacroUI" then
+        return
+    end
+
+    ------------------------------------------------
+    -- Main Frame
+    ------------------------------------------------
+
+    V.StripTextures(MacroFrame)
+
+    MacroFrame:SetBackdrop(V.Backdrop)
+    MacroFrame:SetBackdropColor(unpack(C.Media.Backdrop_Color))
+    MacroFrame:SetBackdropBorderColor(unpack(C.Media.Border_Color))
+
+    ------------------------------------------------
+    -- Buttons
+    ------------------------------------------------
+
+    local Buttons = {
+        MacroNewButton,
+        MacroDeleteButton,
+        MacroExitButton,
+        MacroEditButton,
+        MacroPopupOkayButton,
+        MacroPopupCancelButton,
+    }
+
+    for _, button in ipairs(Buttons) do
+        V.SkinButton(button)
+    end
+MacroFrameTab1:SetHeight(22)
+MacroFrameTab2:SetHeight(22)
+
+MacroFrameTab1:SetWidth(120)
+MacroFrameTab2:SetWidth(120)
+    ------------------------------------------------
+    -- Tabs
+    ------------------------------------------------
+
+    for i = 1, 2 do
+        local tab = _G["MacroFrameTab"..i]
+
+        if tab then
+            V.StripTextures(tab)
+            V.StyleConfigButton(tab)
+        end
+    end
+
+    ------------------------------------------------
+    -- Macro Buttons
+    ------------------------------------------------
+
+    local START = MacroFrame
+
+    for i = 1, 36 do
+        local button = _G["MacroButton"..i]
+
+        if button then
+            button:ClearAllPoints()
+
+            local col = (i - 1) % 7
+            local row = math.floor((i - 1) / 7)
+
+            button:SetPoint(
+                "TOPLEFT",
+                START,
+                "TOPLEFT",
+                24 + col * 46,
+                -70 - row * 46
+            )
+        end
+    end
+
+    ------------------------------------------------
+    -- Popup
+    ------------------------------------------------
+
+    if MacroPopupFrame then
+
+        V.StripTextures(MacroPopupFrame)
+
+        MacroPopupFrame:SetBackdrop(V.Backdrop)
+        MacroPopupFrame:SetBackdropColor(unpack(C.Media.Backdrop_Color))
+        MacroPopupFrame:SetBackdropBorderColor(unpack(C.Media.Border_Color))
+
+        for i = 1, NUM_MACRO_ICONS_SHOWN do
+
+            local button = _G["MacroPopupButton"..i]
+
+            if button then
+
+                V.StripTextures(button)
+                V.CreateBorder(button)
+
+                local icon = _G["MacroPopupButton"..i.."Icon"]
+
+                if icon then
+                    icon:SetTexCoord(.08, .92, .08, .92)
+                end
+            end
+        end
+
+        if MacroPopupEditBox and MacroPopupEditBox.SetBackdrop then
+            MacroPopupEditBox:SetBackdrop(V.Backdrop)
+            MacroPopupEditBox:SetBackdropColor(0, 0, 0, .30)
+            MacroPopupEditBox:SetBackdropBorderColor(unpack(C.Media.Border_Color))
+        end
+    end
+
+    ------------------------------------------------
+    -- Scroll Frames
+    ------------------------------------------------
+
+    if MacroButtonScrollFrame then
+        V.StripTextures(MacroButtonScrollFrame)
+    end
+
+    if MacroFrameScrollFrame then
+        V.StripTextures(MacroFrameScrollFrame)
+    end
+
+    if MacroFrameTextBackground then
+        MacroFrameTextBackground:Hide()
+    end
+
+    ------------------------------------------------
+    -- ScrollBars
+    ------------------------------------------------
+
+    local ScrollBars = {
+        "MacroButtonScrollFrameScrollBar",
+        "MacroFrameScrollFrameScrollBar",
+        "MacroPopupScrollFrameScrollBar",
+    }
+
+    for _, name in ipairs(ScrollBars) do
+
+        local sb = _G[name]
+
+        if sb then
+
+            V.StripTextures(sb)
+            V.StyleScrollBar(sb)
+            sb:ClearAllPoints()
+            sb:SetPoint("TOPLEFT", sb:GetParent(), "TOPRIGHT", 2, 0)
+            sb:SetPoint("BOTTOMLEFT", sb:GetParent(), "BOTTOMRIGHT", 2, 0)
+            local up = _G[name.."ScrollUpButton"]
+            if up then
+                V.StripTextures(up)
+                up:SetNormalTexture("")
+                up:SetPushedTexture("")
+                up:SetHighlightTexture("")
+                up:SetDisabledTexture("")
+                up:Hide()
+                up:EnableMouse(false)
+            end
+
+            local down = _G[name.."ScrollDownButton"]
+            if down then
+                V.StripTextures(down)
+                down:SetNormalTexture("")
+                down:SetPushedTexture("")
+                down:SetHighlightTexture("")
+                down:SetDisabledTexture("")
+                down:Hide()
+                down:EnableMouse(false)
+            end
+        end
+    end
+
+    ------------------------------------------------
+    -- Selected Macro Background
+    ------------------------------------------------
+
+    if MacroFrameSelectedMacroBackground then
+        V.StripTextures(MacroFrameSelectedMacroBackground)
+    end
+
+    if MacroFrameSelectedMacroButton then
+        V.StripTextures(MacroFrameSelectedMacroButton)
+    end
+
+    ------------------------------------------------
+
+    self:UnregisterEvent("ADDON_LOADED")
+
 end)

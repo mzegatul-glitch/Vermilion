@@ -1,6 +1,6 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
-    <Script file="Modules\Quests\QuestLog.lua"/>
-    <Script file="Modules\Quests\WatchFrame.lua"/>
-    <Script file="Modules\Quests\WowheadLink.lua"/>
-    <Script file="Modules\Quests\AutoCollapse.lua"/>
+    <Script file="QuestLog.lua"/>
+    <Script file="WatchFrame.lua"/>
+    <Script file="WowheadLink.lua"/>
+    <Script file="AutoCollapse.lua"/>
 </Ui>

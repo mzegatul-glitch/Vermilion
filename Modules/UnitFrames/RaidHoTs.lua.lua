@@ -1,6 +1,4 @@
 local V, C, L, _ = select(2, ...):unpack()
-print("RaidHoTs loaded")
-print("K =", tostring(K))
 local HoTs = {
 	["Renew"] = true,
 	["Power Word: Shield"] = true,
@@ -37,7 +35,7 @@ end
 		if not name then
 			break
 		end
-		print("HOT BUFF:", name)
+
 		if HoTs[name] then
 
 			frame.HotIcon:SetTexture(icon)

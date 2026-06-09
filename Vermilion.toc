@@ -17,13 +17,16 @@
 Libs\LibStub\LibStub.lua
 Libs\LibCustomGlow-1.0\LibCustomGlow-1.0.xml
 Libs\CallbackHandler-1.0\CallbackHandler-1.0.lua
+Libs\LibSerialize\LibSerialize.lua
+Libs\LibDeflate\LibDeflate.lua
+Libs\LibBase64-1.0\LibBase64-1.0.lua
 Libs\LibHealComm-4.0\LibHealComm-4.0.xml
 Libs\SpecializedAbsorbs-1.0\SpecializedAbsorbs-1.0.lua
 Libs\LibResComm-1.0\LibResComm-1.0.lua
 
 Vermilion.xml
+Modules\Misc\ProcGlow.lua
 AllStats.lua
 AllStats.xml
-Modules\Misc\ProcGlow.lua
 
 BlizzMove.lua

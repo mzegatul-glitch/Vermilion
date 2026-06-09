@@ -1,7 +1,7 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
-    <Script file="Modules\Minimap\Minimap.lua"/>
-    <Script file="Modules\Minimap\RightClick.lua"/>
-    <Script file="Modules\Minimap\WhoPinged.lua"/>
-    <Script file="Modules\Minimap\ButtonCollect.lua"/>
-    <Script file="Modules\Minimap\FarmMode.lua"/>
+    <Script file="Minimap.lua"/>
+    <Script file="RightClick.lua"/>
+    <Script file="WhoPinged.lua"/>
+    <Script file="ButtonCollect.lua"/>
+    <Script file="FarmMode.lua"/>
 </Ui>

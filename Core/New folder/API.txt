@@ -10,7 +10,7 @@ local backdropr, backdropg, backdropb = unpack(C.Media.Backdrop_Color)
 local borderr, borderg, borderb = unpack(C.Media.Border_Color)
 local backdropa = 0.8
 local bordera = 1
-local Symbola = "Interface\\AddOns\\Vermilion\\Media\\Fonts\\Symbola.ttf"
+
 V.Mult = 768 / match(V.Resolution, "%d+x(%d+)") / C.General.UIScale
 V.NoScaleMult = V.Mult * C.General.UIScale
 
@@ -221,24 +221,23 @@ local function StyleButton(button)
 end
 
 -- Deep copy table function
-function V.CopyTable(src, dst)
-    if type(src) ~= "table" then
-        return src
+function V.CopyTable(orig, dest)
+    dest = dest or {}
+    
+    if type(orig) ~= "table" then
+        return orig
     end
-
-    dst = dst or {}
-
-    wipe(dst)
-
-    for k, v in pairs(src) do
+    
+    for k, v in pairs(orig) do
         if type(v) == "table" then
-            dst[k] = V.CopyTable(v, {})
+            dest[k] = {}
+            V.CopyTable(v, dest[k])
         else
-            dst[k] = v
+            dest[k] = v
         end
     end
-
-    return dst
+    
+    return dest
 end
 
 -- Inject Vermilion API into Blizzard Frame Metatables
@@ -300,6 +299,56 @@ if not V.Colors.class then
     }
 end
 
+-- ============================================================
+-- Serialize - Compact Version
+-- ============================================================
+if not V.Serialize then
+    V.Serialize = {}
+end
+
+function V.Serialize:Serialize(data)
+    if type(data) ~= "table" then
+        return tostring(data)
+    end
+
+    local function serializeTable(t)
+        local parts = {}
+        for k, v in pairs(t) do
+            local keyStr = type(k) == "string" and string.format("%q", k) or tostring(k)
+            local valStr
+            if type(v) == "table" then
+                valStr = serializeTable(v)
+            elseif type(v) == "string" then
+                valStr = string.format("%q", v)
+            else
+                valStr = tostring(v)
+            end
+            table.insert(parts, keyStr .. ":" .. valStr)
+        end
+        return "{" .. table.concat(parts, ",") .. "}"
+    end
+
+    return serializeTable(data)
+end
+
+function V.Serialize:Deserialize(data)
+    if not data then return false, nil end
+    local ok, result = pcall(function()
+        local luaStr = data
+            :gsub('"(.-)":', '["%1"]=')
+            :gsub(":true", "=true")
+            :gsub(":false", "=false")
+            :gsub(":null", "=nil")
+        return loadstring("return " .. luaStr)()
+    end)
+    if ok and type(result) == "table" then
+        return true, result
+    end
+    return false, nil
+end
+
+
+
 -- CreateMoverFrame function
 function V.CreateMoverFrame(frame)
     if not V.MoverFrames then
@@ -342,189 +391,4 @@ while Object do
     end
 
     Object = EnumerateFrames(Object)
-end
-
-
-local LibSerialize = LibStub("LibSerialize")
-local LibDeflate = LibStub("LibDeflate")
-local LibBase64 = LibStub("LibBase64-1.0")
-
-V.Serializer = {}
-
-function V.Serializer:Encode(tbl)
-    local s = LibSerialize:Serialize(tbl)
-    s = LibDeflate:CompressDeflate(s)
-    return LibBase64:Encode(s)
-end
-
-function V.Serializer:Decode(str)
-    local compressed = LibBase64:Decode(str)
-    if not compressed then
-        return false
-    end
-
-    local serialized = LibDeflate:DecompressDeflate(compressed)
-    if not serialized then
-        return false
-    end
-
-    local ok, data = LibSerialize:Deserialize(serialized)
-    if not ok then
-        return false
-    end
-
-    return true, data
-end
-
-
-
-
-function V.CreateCloseButton(parent, width, height, fontSize)
-    local button = CreateFrame("Button", nil, parent)
-
-    button:SetSize(width or 32, height or 32)
-
-    button.Text = button:CreateFontString(nil, "OVERLAY")
-    button.Text:SetPoint("CENTER")
-    button.Text:SetFont(Symbola, fontSize or 28, "")
-    button.Text:SetText("❌")
-    button.Text:SetTextColor(1, 1, 1)
-
-    button:SetScript("OnEnter", function(self)
-        self.Text:SetTextColor(V.Color.r, V.Color.g, V.Color.b)
-    end)
-
-    button:SetScript("OnLeave", function(self)
-        self.Text:SetTextColor(1, 1, 1)
-    end)
-
-    return button
-end
-
-function V.StyleConfigButton(button)
-    if button.Styled then
-        return
-    end
-
-    button:CreateBorder()
-
-    local bg = button:CreateTexture(nil, "BACKGROUND")
-    bg:SetAllPoints()
-    bg:SetTexture(C.Media.Blank)
-    bg:SetVertexColor(0, 0, 0, 0.8)
-
-    local glow = button:CreateTexture(nil, "ARTWORK")
-    glow:SetTexture("Interface\\TargetingFrame\\UI-StatusBar")
-    glow:SetVertexColor(V.Color.r, V.Color.g, V.Color.b)
-    glow:SetBlendMode("ADD")
-    glow:SetAlpha(0)
-    glow:SetPoint("TOPLEFT", 0, 0)
-    glow:SetPoint("BOTTOMRIGHT", 0, 0)
-
-    button.Glow = glow
-
-    button:SetScript("OnEnter", function(self)
-        self.Glow:SetAlpha(1)
-    end)
-
-    button:SetScript("OnLeave", function(self)
-        self.Glow:SetAlpha(0)
-    end)
-
-    button.Styled = true
-end
-
--- =====================================================
--- Vermilion ScrollBar Style
--- =====================================================
-
-function V.StyleScrollBar(sb)
-    if not sb or sb.styled then
-        return
-    end
-
-    V.StripTextures(sb)
-
-    local name = sb:GetName()
-
-    if name then
-        local up = _G[name.."ScrollUpButton"]
-        local down = _G[name.."ScrollDownButton"]
-
-        if up then
-            up:Hide()
-            up.Show = V.Noop
-            up:EnableMouse(false)
-        end
-
-        if down then
-            down:Hide()
-            down.Show = V.Noop
-            down:EnableMouse(false)
-        end
-    end
-
-    sb:SetWidth(12)
-
-    if sb.CreateBorder then
-        sb:CreateBorder()
-    else
-        V.CreateBorder(sb)
-    end
-
-    sb:SetBackdropColor(0.08, 0.08, 0.08, 0.90)
-
-    local thumb = sb:GetThumbTexture()
-
-    if thumb then
-        thumb:SetTexture(C.Media.Texture)
-
-        thumb:SetWidth(12)
-        thumb:SetHeight(20)
-
-        thumb:SetVertexColor(
-            123 / 255,
-            132 / 255,
-            137 / 255,
-            1
-        )
-    end
-
-    sb.styled = true
-end
--- =====================================================
--- Vermilion Blizzard Texture killer
--- =====================================================
-function V.StripTextures(frame)
-    if not frame or not frame.GetNumRegions then
-        return
-    end
-
-    for i = 1, frame:GetNumRegions() do
-        local region = select(i, frame:GetRegions())
-
-        if region and region:GetObjectType() == "Texture" then
-            region:SetTexture(nil)
-        end
-    end
-end
-
-function V.SkinButton(button)
-    if not button then return end
-
-    V.StripTextures(button)
-
-    button:SetNormalTexture("")
-    button:SetPushedTexture("")
-    button:SetHighlightTexture("")
-    button:SetDisabledTexture("")
-
-    V.StyleConfigButton(button)
-end
-
-function V.SkinTab(tab)
-    if not tab then return end
-
-    V.StripTextures(tab)
-    V.StyleConfigButton(tab)
 end

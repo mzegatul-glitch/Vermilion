@@ -11,7 +11,7 @@ local GetNumAddOns = GetNumAddOns
 local GetAddOnDependencies = GetAddOnDependencies
 
 local AddonList = CreateFrame("frame", "Addons", UIParent)
-AddonList:SetSize(350, 450)
+AddonList:SetSize(450, 600)
 AddonList:SetPoint("CENTER")
 AddonList:EnableMouse(true)
 AddonList:SetMovable(true)
@@ -22,16 +22,28 @@ AddonList:SetScript("OnMouseUp", function(self) self:StopMovingOrSizing() end)
 AddonList:SetFrameStrata("DIALOG")
 tinsert(UISpecialFrames, "Addons")
 
-local CloseButton = CreateFrame("Button", "CloseButton", AddonList, "UIPanelCloseButton")
-CloseButton:SetSize(26, 26)
-CloseButton:SetPoint("BOTTOMRIGHT", AddonList, "TOPRIGHT", 0, -26)
-CloseButton:SetScript("OnClick", function() AddonList:Hide() end)
+local CloseButton = V.CreateCloseButton(AddonList, 18, 18, 24)
+CloseButton:SetPoint("BOTTOMRIGHT", AddonList, "TOPRIGHT", -8, -24)
+CloseButton:SetScript("OnClick", function()
+    AddonList:Hide()
+end)
 
-local ReloadButton = CreateFrame("Button", "ReloadButton", AddonList, "UIPanelButtonTemplate")
+local ReloadButton = CreateFrame("Button", "ReloadButton", AddonList)
 ReloadButton:SetSize(105, 20)
 ReloadButton:SetPoint("BOTTOM", AddonList, "BOTTOM", 0, 10)
-ReloadButton:SetText(L_ADDON_RELOAD)
-ReloadButton:SetScript("OnClick", function() ReloadUI() end)
+
+local text = ReloadButton:CreateFontString(nil, "OVERLAY")
+text:SetFont(C.Media.Font, 12, C.Media.Font_Style)
+text:SetPoint("CENTER")
+text:SetText(L_ADDON_RELOAD)
+
+ReloadButton:SetFontString(text)
+
+V.StyleConfigButton(ReloadButton)
+
+ReloadButton:SetScript("OnClick", function()
+    ReloadUI()
+end)
 
 AddonList:Hide()
 AddonList:SetScript("OnHide", function(self) end)
@@ -115,17 +127,40 @@ end
 makeList()
 
 -- Credits to Bunny67
-local EnableAllButton = CreateFrame("Button", "EnableAllButton", AddonList, "UIPanelButtonTemplate")
+local EnableAllButton = CreateFrame("Button", "EnableAllButton", AddonList)
 EnableAllButton:SetSize(105, 20)
-EnableAllButton:SetPoint("RIGHT" , ReloadButton, "LEFT", 0, 0)
-EnableAllButton:SetText(L_ADDON_ENABLE_ALL)
-EnableAllButton:SetScript("OnClick", function() EnableAllAddOns() makeList() end)
+EnableAllButton:SetPoint("RIGHT", ReloadButton, "LEFT", -10, 0)
 
-local DisableAllButton = CreateFrame("Button", "DisableAllButton", AddonList, "UIPanelButtonTemplate")
+local EnableText = EnableAllButton:CreateFontString(nil, "OVERLAY")
+EnableText:SetPoint("CENTER")
+EnableText:SetFont(C.Media.Font, 12, C.Media.Font_Style)
+EnableText:SetText(L_ADDON_ENABLE_ALL)
+
+EnableAllButton:SetFontString(EnableText)
+
+EnableAllButton:SetScript("OnClick", function()
+    EnableAllAddOns()
+    makeList()
+end)
+
+V.StyleConfigButton(EnableAllButton)
+local DisableAllButton = CreateFrame("Button", "DisableAllButton", AddonList)
 DisableAllButton:SetSize(105, 20)
-DisableAllButton:SetPoint("LEFT" , ReloadButton, "RIGHT", 0, 0)
-DisableAllButton:SetText(L_ADDON_DISABLE_ALL)
-DisableAllButton:SetScript("OnClick", function() DisableAllAddOns() makeList() end)
+DisableAllButton:SetPoint("LEFT", ReloadButton, "RIGHT", 10, 0)
+
+local DisableText = DisableAllButton:CreateFontString(nil, "OVERLAY")
+DisableText:SetPoint("CENTER")
+DisableText:SetFont(C.Media.Font, 12, C.Media.Font_Style)
+DisableText:SetText(L_ADDON_DISABLE_ALL)
+
+DisableAllButton:SetFontString(DisableText)
+
+DisableAllButton:SetScript("OnClick", function()
+    DisableAllAddOns()
+    makeList()
+end)
+
+V.StyleConfigButton(DisableAllButton)
 
 -- Slash command
 SLASH_ADDONLIST1 = "/addons"
@@ -138,9 +173,9 @@ SlashCmdList.ADDONLIST = function(msg)
 	AddonList:Show()
 end
 
-local AddonListButton = CreateFrame("Button", "AddonListButton", GameMenuFrame, "GameMenuButtonTemplate")
+local AddonListButton = CreateFrame("Button", "AddonListButton", GameMenuFrame)
 AddonListButton:SetText(L_ADDON_LIST)
-AddonListButton:SetPoint("TOP", GameMenuButtonMacros, "BOTTOM", 0, -1)
+AddonListButton:SetPoint("TOP", GameMenuButtonContinue, "BOTTOM", 0, -1)
 
 AddonListButton:SetScript("OnClick", function()
 	if InCombatLockdown() and not IsShown then V.Print("|cffffe02e"..ERR_NOT_IN_COMBAT.."|r") return end
@@ -149,14 +184,14 @@ AddonListButton:SetScript("OnClick", function()
 	if not AddonList or not AddonList:IsShown() then
 		AddonList:Show()
 	else
-		AddonList:Hide()
+	AddonList:Hide()
 	end
 end)
 
-GameMenuButtonLogout:SetPoint("TOP", AddonListButton, "BOTTOM", 0, -16)
+--GameMenuButtonLogout:SetPoint("TOP", AddonListButton, "BOTTOM", 0, -16)
 
-if(IsMacClient()) then
-	GameMenuFrame:SetHeight(292)
-else
-	GameMenuFrame:SetHeight(266)
-end
+--if(IsMacClient()) then
+--	GameMenuFrame:SetHeight(292)
+--else
+--	GameMenuFrame:SetHeight(266)
+--end

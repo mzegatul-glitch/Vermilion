@@ -1,5 +1,5 @@
 local V, C, L, _ = select(2, ...):unpack()
-print("RaidTankCDs loaded")
+
 local TankCDs = {
 	["Pain Suppression"] = true,
 	["Guardian Spirit"] = true,
@@ -36,7 +36,7 @@ end
 		if not name then
 			break
 		end
-		print("TANK BUFF:", name)
+	
 		if TankCDs[name] then
 
 			frame.TankCDIcon:SetTexture(icon)

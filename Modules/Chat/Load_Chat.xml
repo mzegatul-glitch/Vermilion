@@ -1,11 +1,11 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
-    <Script file="Modules\Chat\MouseScroll.lua"/>
-    <Script file="Modules\Chat\Sounds.lua"/>
-    <Script file="Modules\Chat\SpamageMeters.lua"/>
-    <Script file="Modules\Chat\TellTarget.lua"/>
-    <Script file="Modules\Chat\ChatFrames.lua"/>
-    <Script file="Modules\Chat\ChatTabs.lua"/>
-    <Script file="Modules\Chat\CopyChat.lua"/>
-    <Script file="Modules\Chat\CopyUrl.lua"/>
-    <Script file="Modules\Chat\Filters.lua"/>
+    <Script file="MouseScroll.lua"/>
+    <Script file="Sounds.lua"/>
+    <Script file="SpamageMeters.lua"/>
+    <Script file="TellTarget.lua"/>
+    <Script file="ChatFrames.lua"/>
+    <Script file="ChatTabs.lua"/>
+    <Script file="CopyChat.lua"/>
+    <Script file="CopyUrl.lua"/>
+    <Script file="Filters.lua"/>
 </Ui>

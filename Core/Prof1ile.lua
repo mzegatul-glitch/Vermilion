@@ -8,29 +8,30 @@ local PROFILE_VERSION = 1
 -- ============================================================
 -- ALLOWED GROUPS
 -- ============================================================
-local ALLOWED_GROUPS = {
-    General = true,
-    ActionBar = true,
-    Announcements = true,
-    Automation = true,
-    Bag = true,
-    Blizzard = true,
-    Aura = true,
-    Chat = true,
-    Cooldown = true,
-    Error = true,
-    Filger = true,
-    Loot = true,
-    Minimap = true,
-    Misc = true,
-    Nameplate = true,
-    PowerBar = true,
-    PulseCD = true,
-    Skins = true,
-    Tooltip = true,
-    Unitframe = true,
-    Raid = true,
-    Position = true,
+V.AllowGroups = {
+
+    General      = true,
+    --Media        = true,
+    ActionBar    = true,
+    Unitframe    = true,
+    Nameplate    = true,
+    Tooltip      = true,
+    Minimap      = true,
+    Bag          = true,
+    Loot         = true,
+    Raid         = true,
+    Filger       = true,
+    PowerBar     = true,
+    PulseCD      = true,
+    Automation   = true,
+    Announcements= true,
+    Blizzard     = true,
+    Misc         = true,
+    Aura         = true,
+    Skins        = true,
+    Error        = true,
+    Position     = true,
+
 }
 -- ============================================================
 -- DATABASE INITIALIZATION
@@ -98,127 +99,149 @@ end
 -- ============================================================
 
 function V.CreateProfile(profileName)
+
     if VermilionDB.Profiles[profileName] then
         V.Print("|cffff0000Profile already exists: " .. profileName .. "|r")
         return false
     end
-    
-    -- Create new profile with default settings
-    VermilionDB.Profiles[profileName] = CopyTable(C, true)
+
+    VermilionDB.Profiles[profileName] = {}
+
+    local profile = VermilionDB.Profiles[profileName]
+
+    for group, data in pairs(C) do
+
+        if V.AllowGroups[group] and type(data) == "table" then
+            profile[group] = CopyTable(data, true)
+        end
+
+    end
+
     V.Print("|cff00ff00Profile created: " .. profileName .. "|r")
+
     return true
 end
 
 function V.DeleteProfile(profileName)
+
     if profileName == "Default" then
         V.Print("|cffff0000Cannot delete Default profile!|r")
         return false
     end
-    
+
     if not VermilionDB.Profiles[profileName] then
         V.Print("|cffff0000Profile not found: " .. profileName .. "|r")
         return false
     end
-    
-    -- If it was active, switch to Default
+
     local charKey = V.GetCharKey()
+
     if VermilionDB.ActiveProfiles[charKey] == profileName then
         VermilionDB.ActiveProfiles[charKey] = "Default"
     end
-    
+
     VermilionDB.Profiles[profileName] = nil
+
     V.Print("|cff00ff00Profile deleted: " .. profileName .. "|r")
+
     return true
 end
 
 function V.RenameProfile(oldName, newName)
+
     if not VermilionDB.Profiles[oldName] then
         V.Print("|cffff0000Profile not found: " .. oldName .. "|r")
         return false
     end
-    
+
     if VermilionDB.Profiles[newName] then
         V.Print("|cffff0000Profile already exists: " .. newName .. "|r")
         return false
     end
-    
+
     VermilionDB.Profiles[newName] = VermilionDB.Profiles[oldName]
     VermilionDB.Profiles[oldName] = nil
-    
-    -- Update active profile if needed
-    local charKey = V.GetCharKey()
-    if VermilionDB.ActiveProfiles[charKey] == oldName then
-        VermilionDB.ActiveProfiles[charKey] = newName
+
+    for charKey, profile in pairs(VermilionDB.ActiveProfiles) do
+        if profile == oldName then
+            VermilionDB.ActiveProfiles[charKey] = newName
+        end
     end
-    
+
     V.Print("|cff00ff00Profile renamed: " .. oldName .. " -> " .. newName .. "|r")
+
     return true
 end
 
 function V.SetProfile(profileName)
+
     if not VermilionDB.Profiles[profileName] then
         V.Print("|cffff0000Profile not found: " .. profileName .. "|r")
         return false
     end
-    
-    local charKey = V.GetCharKey()
-    VermilionDB.ActiveProfiles[charKey] = profileName
-    
-    -- Load profile into C
+
+    VermilionDB.ActiveProfiles[V.GetCharKey()] = profileName
+
     V.LoadProfile(profileName)
-    
+
     V.Print("|cff00ff00Profile loaded: " .. profileName .. "|r")
+
     return true
 end
 
 -- ============================================================
--- SAVE / LOAD PROFILE
+-- SAVE PROFILE
 -- ============================================================
 
 function V.SaveProfile(profileName)
+
     profileName = profileName or V.GetActiveProfile()
 
     if not profileName then
         return false
     end
 
-    local profile = {}
+    VermilionDB.Profiles[profileName] = {}
+
+    local profile = VermilionDB.Profiles[profileName]
 
     for group, data in pairs(C) do
-        if ALLOWED_GROUPS[group] and type(data) == "table" then
+
+        if V.AllowGroups[group] and type(data) == "table" then
             profile[group] = CopyTable(data, true)
         end
+
     end
 
-    VermilionDB.Profiles[profileName] = profile
+    V.Print("Profile saved: " .. profileName)
 
-    V.Print("|cff00ff00Profile saved: " .. profileName .. "|r")
     return true
 end
 
+-- ============================================================
+-- LOAD PROFILE
+-- ============================================================
+
 function V.LoadProfile(profileName)
+
     profileName = profileName or V.GetActiveProfile()
 
-    local profileData = VermilionDB.Profiles[profileName]
-    if not profileData then
+    local profile = VermilionDB.Profiles[profileName]
+
+    if not profile then
         return false
     end
 
-    for group, settings in pairs(profileData) do
-        if ALLOWED_GROUPS[group] and type(settings) == "table" then
-            C[group] = C[group] or {}
+    for group, data in pairs(profile) do
 
-            for option, value in pairs(settings) do
-                if type(value) == "table" then
-                    C[group][option] = CopyTable(value, true)
-                else
-                    C[group][option] = value
-                end
-            end
+        if V.AllowGroups[group] and type(data) == "table" then
+            C[group] = CopyTable(data, true)
         end
+
     end
 
-    V.Print("|cff00ff00Profile loaded: " .. profileName .. "|r")
+    V.Print("Profile loaded: " .. profileName)
+
     return true
 end
 
@@ -283,16 +306,27 @@ end
 -- ============================================================
 
 local function InitializeProfiles()
-    -- Create Default profile if it doesn't exist
+
     if not VermilionDB.Profiles["Default"] then
-        VermilionDB.Profiles["Default"] = CopyTable(C, true)
+
+        VermilionDB.Profiles["Default"] = {}
+
+        for group, data in pairs(C) do
+
+            if V.AllowGroups[group] and type(data) == "table" then
+                VermilionDB.Profiles["Default"][group] = CopyTable(data, true)
+            end
+
+        end
+
     end
-    
-    -- Load active profile
+
     local activeProfile = V.GetActiveProfile()
+
     V.LoadProfile(activeProfile)
-    
+
     print("|cff2eb6ffProfile System: Initialized|r")
+
 end
 
 -- Register initialization

@@ -59,33 +59,18 @@ local function MoverFadeOthers(active, alpha)
 end
 
 local function CreateConfigButton(parent, text, width, height, font)
-	local button = CreateFrame("Button", nil, parent)
+    local button = CreateFrame("Button", nil, parent)
 
-	button:SetSize(width or 24, height or 24)
-	button:SetTemplate("ARTWORK")
+    button:SetSize(width or 24, height or 24)
 
-	button.Text = button:CreateFontString(nil, "OVERLAY")
-	button.Text:SetPoint("CENTER")
-	button.Text:SetFont(font or C.Media.Font, 13, C.Media.Font_Style)
-	button.Text:SetText(text)
+    V.StyleConfigButton(button)
 
-	-- Hover Glow
-	button.Glow = button:CreateTexture(nil, "HIGHLIGHT")
-	button.Glow:SetTexture("Interface\\TargetingFrame\\UI-StatusBar")
-	button.Glow:SetVertexColor(V.Color.r, V.Color.g, V.Color.b)
-	button.Glow:SetBlendMode("ADD")
-	button.Glow:SetAlpha(0)
-	button.Glow:SetPoint("TOPLEFT", 3, -3)
-	button.Glow:SetPoint("BOTTOMRIGHT", -3, 3)
+    button.Text = button:CreateFontString(nil, "OVERLAY")
+    button.Text:SetPoint("CENTER")
+    button.Text:SetFont(font or C.Media.Font, 13, C.Media.Font_Style)
+    button.Text:SetText(text)
 
-	button:SetScript("OnEnter", function(self)
-		self.Glow:SetAlpha(1)
-	end)
-
-	button:SetScript("OnLeave", function(self)
-		self.Glow:SetAlpha(0)
-	end)
-	return button
+    return button
 end
 
 local ConfigBox = CreateFrame("Frame", "Vermilion_MoverConfig", UIParent)
@@ -119,19 +104,21 @@ ConfigBox.FrameName:SetFont(C.Media.Font, 14, C.Media.Font_Style)
 ConfigBox.FrameName:SetPoint("TOP", 0, -12)
 ConfigBox.FrameName:SetText("")
 
-ConfigBox.Close = CreateConfigButton(ConfigBox, "❌", 32, 32, Symbola)
-ConfigBox.Close.Text:SetFont(Symbola, 21, "")
-ConfigBox.Close:SetPoint("TOPRIGHT", -4, -4)
+ConfigBox.Close = V.CreateCloseButton(ConfigBox, 32, 32, 21)
+ConfigBox.Close:SetPoint("TOPRIGHT", 0, 0)
+
 ConfigBox.Close:SetScript("OnClick", function()
-	for _, mover in pairs(movers) do
-		mover:Hide()
-	end
-	if grid then
-		grid:Hide()
-		grid = nil
-	end
-	ConfigBox:Hide()
-	moving = false
+    for _, mover in pairs(movers) do
+        mover:Hide()
+    end
+
+    if grid then
+        grid:Hide()
+        grid = nil
+    end
+
+    ConfigBox:Hide()
+    moving = false
 end)
 
 ConfigBox:SetScript("OnHide", function()
@@ -150,6 +137,7 @@ ConfigBox.XBox:SetSize(50, 24)
 ConfigBox.XBox:SetPoint("BOTTOMRIGHT", -11, 11)
 ConfigBox.XBox:SetFont(C.Media.Font, 14, C.Media.Font_Style)
 ConfigBox.XBox:SetAutoFocus(false)
+
 ConfigBox.XBox:SetJustifyH("CENTER")
 
 ConfigBox.XBoxBG = CreateFrame("Frame", nil, ConfigBox)
@@ -266,18 +254,18 @@ local GridFrame
 local function ToggleGrid()
 	SlashCmdList.GRIDONSCREEN()
 end
-ConfigBox.Grid = CreateConfigButton(ConfigBox, "Grid", 90, 30)
+ConfigBox.Grid = CreateConfigButton(ConfigBox, "Grid", 90, 28)
 ConfigBox.Grid:SetPoint("TOPLEFT", 8, -42)
 ConfigBox.Grid:SetScript("OnClick", ToggleGrid)
 
-ConfigBox.AuraWatch = CreateConfigButton(ConfigBox, "Aura", 90, 30)
+ConfigBox.AuraWatch = CreateConfigButton(ConfigBox, "Aura", 90, 28)
 ConfigBox.AuraWatch:SetPoint("LEFT", 8, -16)
 
 ConfigBox.AuraWatch:SetScript("OnClick", function()
 	print("AuraWatch Config - WIP")
 end)
 
-ConfigBox.TotalReset = CreateConfigButton(ConfigBox, "Reset", 90, 30)
+ConfigBox.TotalReset = CreateConfigButton(ConfigBox, "Reset", 90, 28)
 ConfigBox.TotalReset:SetPoint("BOTTOMLEFT", 8, 8)
 
 ConfigBox.TotalReset:SetScript("OnClick", function()

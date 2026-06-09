@@ -420,7 +420,22 @@
         "COMBAT_HONOR_GAIN",
         "KILLING_BLOWS",
         "STANDARD_TEXT_FONT",
-        "UIFrameFade_OnUpdate"
+        "UIFrameFade_OnUpdate",
+        "Settings",
+        "Add",
+        "AddonList",
+        "MAX_ACCOUNT_MACROS",
+        "MacroFrameCloseButton",
+        "MacroFrameTextBackground",
+        "MacroFrameText",
+        "MacroPopupFrame",
+        "MacroNewButton",
+        "MacroDeleteButton",
+        "MacroExitButton",
+        "MacroEditButton",
+        "MacroFrameScrollFrame",
+        "MacroFrameSelectedMacroBackground",
+        "MacroFrameSelectedMacroButton"
     ],
     "Lua.type.weakUnionCheck": true
 }

@@ -139,6 +139,10 @@ C["General"] = {
 	["UIScale"] = 0.64,
 	["MultisampleCheck"] = false,
 	["WelcomeMessage"] = true,
+	["Profiles"] = {  -- ✅ ЭНЭ НЭМЭХ
+        Value = "",
+        Options = {}
+    },
 }
 -- Loot Options
 C["Loot"] = {
@@ -236,7 +240,7 @@ C["Skins"] = {
 	["Recount"] = false,
 	["Skada"] = false,
 	["WeakAuras"] = false,
-	["WorldMap"] = false,
+	["WorldMap"] = true,
 }
 -- Tooltip Options
 C["Tooltip"] = {
