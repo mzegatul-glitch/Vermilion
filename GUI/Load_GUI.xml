@@ -1,0 +1,12 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+
+	<!-- Main configuration window -->
+	<Script file="GUI.lua"/>
+
+	<!-- Profile manager / import export / PvP PvE slots -->
+	<Script file="Profiles.lua"/>
+
+	<!-- Move UI / movers / anchor editing -->
+	<Script file="Movers.lua"/>
+
+</Ui>

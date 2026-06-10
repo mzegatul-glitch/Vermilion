@@ -1,7 +1,6 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
     <Script file="Arena.lua"/>
     <Script file="Auras.lua"/>
-    <Script file="Border_old.lua"/>
     <Script file="CastBars.lua"/>
     <Script file="EnhancedFrames.lua"/>
     <Script file="HealthMinMax.lua"/>

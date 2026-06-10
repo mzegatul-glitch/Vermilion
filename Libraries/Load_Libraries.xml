@@ -1,0 +1,33 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+
+	<!-- Core Libraries -->
+	<Script file="LibStub\LibStub.lua"/>
+	<Script file="CallbackHandler-1.0\CallbackHandler-1.0.lua"/>
+
+	<!-- Shared Media -->
+	<Script file="LibSharedMedia-3.0\LibSharedMedia-3.0.lua"/>
+
+	<!-- Serialization -->
+	<Script file="LibSerialize\LibSerialize.lua"/>
+	<Script file="LibDeflate\LibDeflate.lua"/>
+	<Script file="LibBase64-1.0\LibBase64-1.0.lua"/>
+
+	<!-- Combat -->
+	<Include file="LibHealComm-4.0\LibHealComm-4.0.xml"/>
+	<Script file="SpecializedAbsorbs-1.0\SpecializedAbsorbs-1.0.lua"/>
+	<Script file="LibResComm-1.0\LibResComm-1.0.lua"/>
+
+	<!-- Range -->
+	<Script file="LibSpellRange-1.0\LibSpellRange-1.0.lua"/>
+	<!-- <Script file="LibRangeCheck-2.0\LibRangeCheck-2.0.lua"/> -->
+
+	<!-- Talents -->
+	<!-- <Script file="LibGroupTalents-1.0\LibGroupTalents-1.0.lua"/> -->
+
+	<!-- Visual -->
+	<Include file="LibCustomGlow-1.0\LibCustomGlow-1.0.xml"/>
+
+	<!-- Utility -->
+	<!-- <Include file="DRList-1.0\DRList-1.0.xml"/> -->
+
+</Ui>

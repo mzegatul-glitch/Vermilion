@@ -1,0 +1,17 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+
+	<Script file="Templates.lua"/>
+	<Script file="StyleAPI.lua"/>
+	<Script file="Font.lua"/>
+	<Script file="Backdrop.lua"/>
+	<Script file="Border.lua"/>
+	<Script file="Texture.lua"/>
+	<Script file="Button.lua"/>
+	<Script file="CheckBox.lua"/>
+	<Script file="EditBox.lua"/>
+	<Script file="Slider.lua"/>
+	<Script file="ScrollBar.lua"/>
+	<Script file="StatusBar.lua"/>
+	<Script file="Panel.lua"/>
+
+</Ui>

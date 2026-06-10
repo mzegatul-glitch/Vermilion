@@ -1,4 +1,4 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
-    <Include file="Skins\Blizzard\Load_Blizzard.xml"/>
-    <Include file="Skins\Blizzard\Load_AddOns.xml"/>
+<Include file="Blizzard\Load_Blizzard.xml"/>
+<Include file="Addons\Load_AddOns.xml"/>
 </Ui>

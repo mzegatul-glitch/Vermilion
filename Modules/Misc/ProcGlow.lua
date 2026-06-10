@@ -122,7 +122,7 @@ local ClassProcs = {
         [53489] = {
             name         = "Art of War",
             spells       = {"Exorcism", "Flash of Light"},
-            texture      = "Interface\\AddOns\\Vermilion\\Media\\Textures\\SpellActivationOverlays\\Art_of_War.blp",
+            texture      = "Interface\\AddOns\\Vermilion\\Media\\SpellActivationOverlays\\Art_of_War.blp",
             position     = "Left + Right (Flipped)",
             scale        = 0.6,
             r = 255, g = 255, b = 255,
@@ -132,7 +132,7 @@ local ClassProcs = {
         [59578] = {
             name         = "Art of War",
             spells       = {"Exorcism", "Flash of Light"},
-            texture      = "Interface\\AddOns\\Vermilion\\Media\\Textures\\SpellActivationOverlays\\Art_of_War.blp",
+            texture      = "Interface\\AddOns\\Vermilion\\Media\\SpellActivationOverlays\\Art_of_War.blp",
             position     = "Left + Right (Flipped)",
             scale        = 1,
             r = 255, g = 255, b = 255,
@@ -142,7 +142,7 @@ local ClassProcs = {
         [53672] = {
             name         = "Infusion of Light",
             spells       = {"Flash of Light", "Holy Light"},
-            texture      = "Interface\\AddOns\\Vermilion\\Media\\Textures\\SpellActivationOverlays\\Daybreak.blp",
+            texture      = "Interface\\AddOns\\Vermilion\\Media\\SpellActivationOverlays\\Daybreak.blp",
             position     = "Left + Right (Flipped)",
             scale        = 1,
             r = 255, g = 255, b = 255,
@@ -152,7 +152,7 @@ local ClassProcs = {
         [54149] = {
             name         = "Infusion of Light",
             spells       = {"Flash of Light", "Holy Light"},
-            texture      = "Interface\\AddOns\\Vermilion\\Media\\Textures\\SpellActivationOverlays\\Daybreak.blp",
+            texture      = "Interface\\AddOns\\Vermilion\\Media\\SpellActivationOverlays\\Daybreak.blp",
             position     = "Left + Right (Flipped)",
             scale        = 1,
             r = 255, g = 255, b = 255,
@@ -199,7 +199,7 @@ local ClassProcs = {
         [52437] = {
             name         = "Sudden Death",
             spells       = {"Execute"},
-            texture      = "Interface\\AddOns\\Vermilion\\Media\\Textures\\SpellActivationOverlays\\Sudden_Death.blp",
+            texture      = "Interface\\AddOns\\Vermilion\\Media\\SpellActivationOverlays\\Sudden_Death.blp",
             position     = "Left + Right (Flipped)",
             scale        = 1,
             r = 255, g = 255, b = 255,
@@ -209,7 +209,7 @@ local ClassProcs = {
         [46916] = {
             name         = "Bloodsurge",
             spells       = {"Slam"},
-            texture      = "Interface\\AddOns\\Vermilion\\Media\\Textures\\SpellActivationOverlays\\Blood_Surge.blp",
+            texture      = "Interface\\AddOns\\Vermilion\\Media\\SpellActivationOverlays\\Blood_Surge.blp",
             position     = "Top",
             scale        = 1,
             r = 255, g = 255, b = 255,
@@ -219,7 +219,7 @@ local ClassProcs = {
         [50227] = {
             name         = "Sword and Board",
             spells       = {"Shield Slam"},
-            texture      = "Interface\\AddOns\\Vermilion\\Media\\Textures\\SpellActivationOverlays\\Sword_and_Board.blp",
+            texture      = "Interface\\AddOns\\Vermilion\\Media\\SpellActivationOverlays\\Sword_and_Board.blp",
             position     = "Left + Right (Flipped)",
             scale        = 1,
             r = 255, g = 255, b = 255,
@@ -229,7 +229,7 @@ local ClassProcs = {
         [56636] = {
             name         = "Taste for Blood",
             spells       = {"Overpower"},
-            texture      = "Interface\\AddOns\\Vermilion\\Media\\Textures\\SpellActivationOverlays\\bandits_guile.blp",
+            texture      = "Interface\\AddOns\\Vermilion\\Media\\SpellActivationOverlays\\bandits_guile.blp",
             position     = "Left + Right (Flipped)",
             scale        = 1,
             r = 255, g = 255, b = 255,
@@ -239,7 +239,7 @@ local ClassProcs = {
         [46924] = {
             name         = "Bladestorm",
             spells       = {},
-            texture      = "Interface\\AddOns\\Vermilion\\Media\\Textures\\SpellActivationOverlays\\GenericArc_05.blp",
+            texture      = "Interface\\AddOns\\Vermilion\\Media\\SpellActivationOverlays\\GenericArc_05.blp",
             position     = "Left + Right (Flipped)",
             scale        = 1.25,
             r = 200, g = 200, b = 200,
@@ -299,7 +299,7 @@ local ClassProcs = {
         [57761] = {
             name         = "Brain Freeze",
             spells       = {"Frostfire Bolt", "Fireball"},
-            texture      = "Interface\\AddOns\\Vermilion\\Media\\Textures\\SpellActivationOverlays\\Brain_Freeze.blp",
+            texture      = "Interface\\AddOns\\Vermilion\\Media\\SpellActivationOverlays\\Brain_Freeze.blp",
             position     = "Top",
             scale        = 1,
             r = 255, g = 255, b = 255,
@@ -309,7 +309,7 @@ local ClassProcs = {
         [44401] = {
             name         = "Missile Barrage",
             spells       = {"Arcane Missiles"},
-            texture      = "Interface\\AddOns\\Vermilion\\Media\\Textures\\SpellActivationOverlays\\Arcane_Missiles.blp",
+            texture      = "Interface\\AddOns\\Vermilion\\Media\\SpellActivationOverlays\\Arcane_Missiles.blp",
             position     = "Left + Right (Flipped)",
             scale        = 1,
             r = 255, g = 255, b = 255,
@@ -319,7 +319,7 @@ local ClassProcs = {
         [48108] = {
             name         = "Hot Streak",
             spells		 = {"Pyroblast"},
-            texture      = "Interface\\AddOns\\Vermilion\\Media\\Textures\\SpellActivationOverlays\\Hot_Streak.blp",
+            texture      = "Interface\\AddOns\\Vermilion\\Media\\SpellActivationOverlays\\Hot_Streak.blp",
             position     = "Left + Right (Flipped)",
             scale        = 1,
             r = 255, g = 255, b = 255,
@@ -329,7 +329,7 @@ local ClassProcs = {
         [74396] = {
             name         = "Fingers of Frost",
             spells       = {"Ice Lance", "Deep Freeze"},
-            texture      = "Interface\\AddOns\\Vermilion\\Media\\Textures\\SpellActivationOverlays\\Frozen_Fingers.blp",
+            texture      = "Interface\\AddOns\\Vermilion\\Media\\SpellActivationOverlays\\Frozen_Fingers.blp",
             position     = "Left + Right (Flipped)",
             scale        = 1,
             r = 255, g = 255, b = 255,
@@ -342,7 +342,7 @@ local ClassProcs = {
         [126] = {
             name         = "Eye of Kilrogg",
             spells       = {},
-            texture      = "Interface\\AddOns\\Vermilion\\Media\\Textures\\SpellActivationOverlays\\GenericTop_01.blp",
+            texture      = "Interface\\AddOns\\Vermilion\\Media\\SpellActivationOverlays\\GenericTop_01.blp",
             position     = "Top",
             scale        = 1,
             r = 64, g = 255, b = 64,
@@ -352,7 +352,7 @@ local ClassProcs = {
         [17941] = {
             name         = "Shadow Trance",
             spells       = {"Shadow Bolt"},
-            texture      = "Interface\\AddOns\\Vermilion\\Media\\Textures\\SpellActivationOverlays\\Nightfall.blp",
+            texture      = "Interface\\AddOns\\Vermilion\\Media\\SpellActivationOverlays\\Nightfall.blp",
             position     = "Left + Right (Flipped)",
             scale        = 1,
             r = 255, g = 255, b = 255,
@@ -362,7 +362,7 @@ local ClassProcs = {
         [47383] = {
             name         = "Molten Core",
             spells       = {"Incinerate", "Soul Fire"},
-            texture      = "Interface\\AddOns\\Vermilion\\Media\\Textures\\SpellActivationOverlays\\Molten_Core.blp",
+            texture      = "Interface\\AddOns\\Vermilion\\Media\\SpellActivationOverlays\\Molten_Core.blp",
             position     = "Left + Right (Flipped)",
             scale        = 1,
             r = 255, g = 255, b = 255,
@@ -372,7 +372,7 @@ local ClassProcs = {
         [71162] = {
             name         = "Molten Core",
             spells       = {"Incinerate", "Soul Fire"},
-            texture      = "Interface\\AddOns\\Vermilion\\Media\\Textures\\SpellActivationOverlays\\Molten_Core.blp",
+            texture      = "Interface\\AddOns\\Vermilion\\Media\\SpellActivationOverlays\\Molten_Core.blp",
             position     = "Left + Right (Flipped)",
             scale        = 1,
             r = 255, g = 255, b = 255,
@@ -382,7 +382,7 @@ local ClassProcs = {
         [71165] = {
             name         = "Molten Core",
             spells       = {"Incinerate", "Soul Fire"},
-            texture      = "Interface\\AddOns\\Vermilion\\Media\\Textures\\SpellActivationOverlays\\Molten_Core.blp",
+            texture      = "Interface\\AddOns\\Vermilion\\Media\\SpellActivationOverlays\\Molten_Core.blp",
             position     = "Left + Right (Flipped)",
             scale        = 1,
             r = 255, g = 255, b = 255,
@@ -392,7 +392,7 @@ local ClassProcs = {
         [63165] = {
             name         = "Decimation",
             spells       = {"Soul Fire"},
-            texture      = "Interface\\AddOns\\Vermilion\\Media\\Textures\\SpellActivationOverlays\\Impact.blp",
+            texture      = "Interface\\AddOns\\Vermilion\\Media\\SpellActivationOverlays\\Impact.blp",
             position     = "Top",
             scale        = 0.8,
             r = 255, g = 255, b = 255,
@@ -402,7 +402,7 @@ local ClassProcs = {
         [63167] = {
             name         = "Decimation",
             spells       = {"Soul Fire"},
-            texture      = "Interface\\AddOns\\Vermilion\\Media\\Textures\\SpellActivationOverlays\\Impact.blp",
+            texture      = "Interface\\AddOns\\Vermilion\\Media\\SpellActivationOverlays\\Impact.blp",
             position     = "Top",
             scale        = 0.8,
             r = 255, g = 255, b = 255,
@@ -412,7 +412,7 @@ local ClassProcs = {
         [34936] = {
             name         = "Backlash",
             spells       = {"Shadow Bolt", "Incinerate"},
-            texture      = "Interface\\AddOns\\Vermilion\\Media\\Textures\\SpellActivationOverlays\\Backlash.blp",
+            texture      = "Interface\\AddOns\\Vermilion\\Media\\SpellActivationOverlays\\Backlash.blp",
             position     = "Top",
             scale        = 1,
             r = 255, g = 255, b = 255,
@@ -422,7 +422,7 @@ local ClassProcs = {
         [47283] = {
             name         = "Empowered Imp",
             spells       = {"Shadow Bolt", "Incinerate"},
-            texture      = "Interface\\AddOns\\Vermilion\\Media\\Textures\\SpellActivationOverlays\\Imp_Empowerment.blp",
+            texture      = "Interface\\AddOns\\Vermilion\\Media\\SpellActivationOverlays\\Imp_Empowerment.blp",
             position     = "Left + Right (Flipped)",
             scale        = 1,
             r = 255, g = 255, b = 255,
@@ -435,7 +435,7 @@ local ClassProcs = {
         [16870] = {
             name         = "Omen of Clarity",
             spells       = {"Regrowth", "Healing Touch", "Starfire", "Wrath"},
-            texture      = "Interface\\AddOns\\Vermilion\\Media\\Textures\\SpellActivationOverlays\\Natures_Grace.blp",
+            texture      = "Interface\\AddOns\\Vermilion\\Media\\SpellActivationOverlays\\Natures_Grace.blp",
             position     = "Left + Right (Flipped)",
             scale        = 1,
             r = 255, g = 255, b = 255,
@@ -445,7 +445,7 @@ local ClassProcs = {
         [48518] = {
             name         = "Eclipse (Lunar)",
             spells       = {"Starfire"},
-            texture      = "Interface\\AddOns\\Vermilion\\Media\\Textures\\SpellActivationOverlays\\Eclipse_Moon.blp",
+            texture      = "Interface\\AddOns\\Vermilion\\Media\\SpellActivationOverlays\\Eclipse_Moon.blp",
             position     = "Left + Right (Flipped)",
             scale        = 1,
             r = 244, g = 244, b = 244,
@@ -455,7 +455,7 @@ local ClassProcs = {
         [48517] = {
             name         = "Eclipse (Solar)",
             spells       = {"Wrath"},
-            texture      = "Interface\\AddOns\\Vermilion\\Media\\Textures\\SpellActivationOverlays\\Eclipse_Sun.blp",
+            texture      = "Interface\\AddOns\\Vermilion\\Media\\SpellActivationOverlays\\Eclipse_Sun.blp",
             position     = "Left + Right (Flipped)",
             scale        = 1,
             r = 244, g = 244, b = 244,
@@ -465,7 +465,7 @@ local ClassProcs = {
         [16886] = {
             name        = "Nature's Grace",
             spells      = {},
-            texture     = "Interface\\AddOns\\Vermilion\\Media\\Textures\\SpellActivationOverlays\\Serendipity.blp",
+            texture     = "Interface\\AddOns\\Vermilion\\Media\\SpellActivationOverlays\\Serendipity.blp",
             position    = "Top",
             scale       = 0.7,
             r = 255, g = 255, b = 255,
@@ -478,7 +478,7 @@ local ClassProcs = {
         [63731] = {
             name         = "Serendipity (1-2 Stacks)",
             spells       = {},
-            texture      = "Interface\\AddOns\\Vermilion\\Media\\Textures\\SpellActivationOverlays\\Serendipity.blp",
+            texture      = "Interface\\AddOns\\Vermilion\\Media\\SpellActivationOverlays\\Serendipity.blp",
             position     = "Top",
             scale        = 0.6,
             r = 255, g = 255, b = 255,
@@ -488,7 +488,7 @@ local ClassProcs = {
         [63735] = {
             name         = "Serendipity (1-2 Stacks)",
             spells       = {},
-            texture      = "Interface\\AddOns\\Vermilion\\Media\\Textures\\SpellActivationOverlays\\Serendipity.blp",
+            texture      = "Interface\\AddOns\\Vermilion\\Media\\SpellActivationOverlays\\Serendipity.blp",
             position     = "Top",
             scale        = 0.8,
             r = 255, g = 255, b = 255,
@@ -498,7 +498,7 @@ local ClassProcs = {
         [63734] = {
             name         = "Serendipity (3 Stacks)",
             spells       = {"Greater Heal", "Prayer of Healing"},
-            texture      = "Interface\\AddOns\\Vermilion\\Media\\Textures\\SpellActivationOverlays\\Serendipity.blp",
+            texture      = "Interface\\AddOns\\Vermilion\\Media\\SpellActivationOverlays\\Serendipity.blp",
             position     = "Top",
             scale        = 1,
             r = 255, g = 255, b = 255,
@@ -518,7 +518,7 @@ local ClassProcs = {
         [33151] = {
             name         = "Surge of Light",
             spells       = {"Smite", "Flash Heal"},
-            texture      = "Interface\\AddOns\\Vermilion\\Media\\Textures\\SpellActivationOverlays\\Surge_of_Light.blp",
+            texture      = "Interface\\AddOns\\Vermilion\\Media\\SpellActivationOverlays\\Surge_of_Light.blp",
             position     = "Left + Right (Flipped)",
             scale        = 1,
             r = 255, g = 255, b = 255,
@@ -563,7 +563,7 @@ local ClassProcs = {
         [53220] = {
             name         = "Improved Steady Shot",
             spells       = {"Aimed Shot", "Arcane Shot", "Chimera Shot"},
-            texture      = "Interface\\AddOns\\Vermilion\\Media\\Textures\\SpellActivationOverlays\\Master_Marksman.blp",
+            texture      = "Interface\\AddOns\\Vermilion\\Media\\SpellActivationOverlays\\Master_Marksman.blp",
             position     = "Top",
             scale        = 1,
             r = 255, g = 255, b = 255,
@@ -573,7 +573,7 @@ local ClassProcs = {
         [56453] = {
             name         = "Lock and Load",
             spells       = {"Arcane Shot", "Explosive Shot"},
-            texture      = "Interface\\AddOns\\Vermilion\\Media\\Textures\\SpellActivationOverlays\\Lock_and_Load.blp",
+            texture      = "Interface\\AddOns\\Vermilion\\Media\\SpellActivationOverlays\\Lock_and_Load.blp",
             position     = "Top",
             scale        = 1,
             r = 255, g = 255, b = 255,
@@ -586,7 +586,7 @@ local ClassProcs = {
         [53817] = {
             name        = "Maelstrom Weapon",
             spells      = {"Lightning Bolt", "Chain Lightning", "Lesser Healing Wave", "Healing Wave", "Chain Heal"},
-            texture     = "Interface\\AddOns\\Vermilion\\Media\\Textures\\SpellActivationOverlays\\Maelstrom_Weapon.blp",
+            texture     = "Interface\\AddOns\\Vermilion\\Media\\SpellActivationOverlays\\Maelstrom_Weapon.blp",
             position    = "Top",
             scale       = 1,
             r = 255, g = 255, b = 255,
@@ -596,7 +596,7 @@ local ClassProcs = {
         [53390] = {
             name        = "Tidal Waves",
             spells      = {"Lesser Healing Wave", "Healing Wave"},
-            texture     = "Interface\\AddOns\\Vermilion\\Media\\Textures\\SpellActivationOverlays\\High_Tide.blp",
+            texture     = "Interface\\AddOns\\Vermilion\\Media\\SpellActivationOverlays\\High_Tide.blp",
             position    = "TOP",
             scale       = 1,
             r = 255, g = 255, b = 255,
@@ -606,7 +606,7 @@ local ClassProcs = {
         [43339] = {
             name        = "Shamanistic Focus",
             spells      = {"Earth Shock", "Flame Shock", "Frost Shock"},
-            texture     = "Interface\\AddOns\\Vermilion\\Media\\Textures\\SpellActivationOverlays\\GenericArc_05.blp",
+            texture     = "Interface\\AddOns\\Vermilion\\Media\\SpellActivationOverlays\\GenericArc_05.blp",
             position    = "Left + Right (Flipped)",
             scale       = 1.25,
             r = 255, g = 128, b = 0,
@@ -616,7 +616,7 @@ local ClassProcs = {
         [16246] = {
             name        = "Elemental Focus",
             spells      = {"Lightning Bolt", "Chain Lightning", "Lava Burst"},
-            texture     = "Interface\\AddOns\\Vermilion\\Media\\Textures\\SpellActivationOverlays\\GenericArc_05.blp",
+            texture     = "Interface\\AddOns\\Vermilion\\Media\\SpellActivationOverlays\\GenericArc_05.blp",
             position    = "Left + Right (Flipped)",
             scale       = 1.25,
             r = 255, g = 255, b = 255,
@@ -629,7 +629,7 @@ local ClassProcs = {
         [51713] = {
             name         = "Shadow Dance",
             spells       = {"Ambush", "Garrote", "Cheap Shot", "Premeditation"},
-            texture      = "Interface\\AddOns\\Vermilion\\Media\\Textures\\SpellActivationOverlays\\Slice_and_Dice.blp",
+            texture      = "Interface\\AddOns\\Vermilion\\Media\\SpellActivationOverlays\\Slice_and_Dice.blp",
             position     = "Left + Right (Flipped)",
             scale        = 1,
             r = 255, g = 255, b = 255,
@@ -639,7 +639,7 @@ local ClassProcs = {
         [14251] = {
             name        = "Riposte",
             spells      = {"Riposte"},
-            texture     = "Interface\\AddOns\\Vermilion\\Media\\Textures\\SpellActivationOverlays\\bandits_guile.blp",
+            texture     = "Interface\\AddOns\\Vermilion\\Media\\SpellActivationOverlays\\bandits_guile.blp",
             position    = "Left + Right (Flipped)",
             scale       = 1.1,
             r = 255, g = 255, b = 255,
@@ -664,7 +664,7 @@ local ClassProcs = {
         [59052] = {
             name         = "Rime",
             spells       = {"Howling Blast"},
-            texture      = "Interface\\AddOns\\Vermilion\\Media\\Textures\\SpellActivationOverlays\\Rime.blp",
+            texture      = "Interface\\AddOns\\Vermilion\\Media\\SpellActivationOverlays\\Rime.blp",
             position     = "Top",
             scale        = 1,
             r = 255, g = 255, b = 255,
@@ -674,7 +674,7 @@ local ClassProcs = {
         [51124] = {
             name         = "Killing Machine",
             spells       = {"Obliterate", "Frost Strike", "Icy Touch"},
-            texture      = "Interface\\AddOns\\Vermilion\\Media\\Textures\\SpellActivationOverlays\\Killing_Machine.blp",
+            texture      = "Interface\\AddOns\\Vermilion\\Media\\SpellActivationOverlays\\Killing_Machine.blp",
             position     = "Left + Right (Flipped)",
             scale        = 1,
             r = 255, g = 255, b = 255,
@@ -684,7 +684,7 @@ local ClassProcs = {
         [49530] = {
             name         = "Sudden Doom",
             spells       = {"Death Coil"},
-            texture      = "Interface\\AddOns\\Vermilion\\Media\\Textures\\SpellActivationOverlays\\Sudden_Doom.blp",
+            texture      = "Interface\\AddOns\\Vermilion\\Media\\SpellActivationOverlays\\Sudden_Doom.blp",
             position     = "Left + Right (Flipped)",
             scale        = 1,
             r = 255, g = 255, b = 255,

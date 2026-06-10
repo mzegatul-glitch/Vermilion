@@ -1,0 +1,29 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<!-- Core API -->
+	<Script file="API.lua"/>
+	<Script file="Functions.lua"/>
+	<Script file="Colors.lua"/>
+
+	<!-- Style Framework -->
+	<Include file="Style\Load_Style.xml"/>
+
+	<!-- Border Engine -->
+	<Script file="Border.lua"/>
+
+	<!-- Core Systems -->
+	<Script file="Animation.lua"/>
+	<Script file="PixelPerfect.lua"/>
+	<Script file="Anchors.lua"/>
+
+	<!-- Install / Utility -->
+	<Script file="Install.lua"/>
+	<Script file="Disable.lua"/>
+	<Script file="Commands.lua"/>
+	<Script file="Kill.lua"/>
+	<Script file="CheckVersion.lua"/>
+
+	<!-- Database / Events -->
+	<Script file="Loading.lua"/>
+	<Include file="Libraries\oGlow\oGlow.xml"/>
+
+</Ui>

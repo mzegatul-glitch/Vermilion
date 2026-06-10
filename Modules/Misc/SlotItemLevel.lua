@@ -1,8 +1,24 @@
+local V, C, L, _ = select(2, ...):unpack()
 
-local addonTable = select(2, ...)  -- addonTable-г авна
-local V, C, L, _ = addonTable:unpack()  -- ШУУД unpack() хийх
+V.Modules = V.Modules or {}
 
-if C.Misc.ItemLevel ~= true then return end  -- Хэрэв ийм тохиргоо байхгүй бол энийг өөрчлөх
+V.Modules["SlotItemLevel"] = {
+    Enable = function()
+        -- frame/text үүсгэх
+    end,
+
+    Disable = function()
+        -- hide хийх
+    end,
+
+    Refresh = function()
+        if C.Misc.ItemLevel then
+            V.Modules["SlotItemLevel"].Enable()
+        else
+            V.Modules["SlotItemLevel"].Disable()
+        end
+    end,
+}
 -- ============================================================
 -- Character & Inspect panel item level
 -- ============================================================

@@ -1,0 +1,17 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+
+	<!-- Default Settings -->
+	<Script file="Settings.lua"/>
+
+	<!-- Default Positions -->
+	<Script file="Positions.lua"/>
+
+	<!-- Filters -->
+	<Script file="Filters\Announcements.lua"/>
+	<Script file="Filters\ChatSpam.lua"/>
+	<Script file="Filters\Errors.lua"/>
+	<Script file="Filters\FilgerSpells.lua"/>
+	<Script file="Filters\Nameplates.lua"/>
+	<Script file="Filters\NeedItems.lua"/>
+
+</Ui>

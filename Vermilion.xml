@@ -1,50 +1,16 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
+
 	<Script file="Core\Init.lua"/>
 
-	<Script file="Locales\enUS.lua"/>
+	<Include file="Libraries\Load_Libraries.xml"/>
+	<Include file="Config\Load_Config.xml"/>
+	<Include file="Media\Load_Media.xml"/>
+	<Include file="Locales\Load_Locales.xml"/>
 
-	<Script file="Config\Settings.lua"/>
-	<Script file="Config\Positions.lua"/>
-	<Script file="Core\Profiles.lua"/>
-	
-	<Script file="Core\GUI.lua"/>
-	
-	
-	<Script file="Core\PixelPerfect.lua"/>
+	<Include file="Core\Load_Core.xml"/>
 
-	<Include file="Libs\oGlow\oGlow.xml"/>
-	<Script file="Libs\LibStub\LibStub.lua"/>
-
-	<Script file="Libs\CallbackHandler-1.0\CallbackHandler-1.0.lua"/>
-	<Script file="Libs\LibSharedMedia-3.0\LibSharedMedia-3.0.lua"/>
-	<Script file="Media\Media.lua"/>
-	<Script file="Core\Colors.lua"/>
-	<Script file="Config\Filters\Announcements.lua"/>
-	<Script file="Config\Filters\ChatSpam.lua"/>
-	<Script file="Config\Filters\Errors.lua"/>
-	<Script file="Config\Filters\FilgerSpells.lua"/>
-	<Script file="Config\Filters\Nameplates.lua"/>
-	<Script file="Config\Filters\NeedItems.lua"/>
-
-	<Script file="Core\API.lua"/>
-	<Script file="Core\Functions.lua"/>
-	<Script file="Core\Animation.lua"/>
-	<Script file="Core\Install.lua"/>
-	<Script file="Core\Disable.lua"/>
-	<Script file="Core\Commands.lua"/>
-	<Script file="Core\WTF.lua"/>
-	<Script file="Core\Kill.lua"/>
-	<Script file="Core\CheckVersion.lua"/>
-	<Script file="Core\Border.lua"/>
-	<Script file="Core\Developer.lua"/>
-	<Script file="Core\Panels.lua"/>
-	<Script file="Core\Temp.lua"/>
-	<Script file="Core\Loading.lua"/>
-	
+	<Include file="GUI\Load_GUI.xml"/>
 	<Include file="Modules\Load_Modules.xml"/>
+	<Include file="Developer\Load_Developer.xml"/>
 
-
-
-	<Script file="Core\Movers.lua"/>
-	
 </Ui>
